@@ -7,6 +7,7 @@ import Combine
 class AlbumStickersViewController: UIViewController {
     
     private let viewModel: AlbumStickersViewModel
+    private let router: Router
     
     private var stickersCollectionView: UICollectionView!
     private var collectionSuperview: UIView!
@@ -16,7 +17,8 @@ class AlbumStickersViewController: UIViewController {
     private var disposable = Set<AnyCancellable>()
     
     
-    init (viewModel: AlbumStickersViewModel) {
+    init (viewModel: AlbumStickersViewModel, router: Router) {
+        self.router = router
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)

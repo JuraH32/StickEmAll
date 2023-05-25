@@ -2,6 +2,8 @@ import PureLayout
 import Combine
 
 class AlbumPickerViewController: UIViewController {
+    
+    private let router: Router
     private let viewModel: AlbumPickerViewModel
     
     private var viewTitleLabel: UILabel!
@@ -23,7 +25,8 @@ class AlbumPickerViewController: UIViewController {
     var statsViewMaxHeight: CGFloat!
     var bottomViewTopConstraint: NSLayoutConstraint!
     
-    init (viewModel: AlbumPickerViewModel) {
+    init (viewModel: AlbumPickerViewModel, router: Router) {
+        self.router = router
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
@@ -76,9 +79,14 @@ class AlbumPickerViewController: UIViewController {
         albumStatsView.addGestureRecognizer(touchStatsGesture)
         
         let touchAnywhereGesture = UITapGestureRecognizer(target: self, action: #selector(handleStatsClose(_:)))
-        touchAnywhereGesture.numberOfTouchesRequired = 1
+        touchAnywhereGesture.numberOfTapsRequired = 1
         touchAnywhereGesture.numberOfTouchesRequired = 1
         view.addGestureRecognizer(touchAnywhereGesture)
+        
+        let touchGesture = UITapGestureRecognizer(target: self, action: #selector(handleOpenDetails(_:)))
+        touchGesture.numberOfTapsRequired = 1
+        touchGesture.numberOfTouchesRequired = 1
+        currentAlbum.addGestureRecognizer(touchGesture)
     }
     
     private func styleViews() {
@@ -219,6 +227,12 @@ class AlbumPickerViewController: UIViewController {
                     self.view.layoutIfNeeded()
                 })
             }
+        }
+    }
+    
+    @objc private func handleOpenDetails(_ gestureRecognizer: UITapGestureRecognizer) {
+        if gestureRecognizer.state == .ended {
+            router.openAlbumDetails(code: albums[albumIndex].code)
         }
     }
 }
