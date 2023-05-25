@@ -18,8 +18,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         let albumDataSource = AlbumDataSource()
-        let albumPickerViewModel = AlbumPickerViewModel(dataSource: albumDataSource)
-        let vc = AlbumPickerViewController(viewModel: albumPickerViewModel)
+        //let albumPickerViewModel = AlbumPickerViewModel(dataSource: albumDataSource)
+        //let vc = AlbumPickerViewController(viewModel: albumPickerViewModel)
+        let albumStickersViewModel = AlbumStickersViewModel(dataSource: albumDataSource)
+        let vc = AlbumStickersViewController(viewModel: albumStickersViewModel)
         window?.rootViewController = vc
         window?.makeKeyAndVisible()
     }
