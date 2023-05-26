@@ -12,4 +12,11 @@ extension UIView {
         maskLayer.path = maskPath.cgPath
         layer.mask = maskLayer
     }
+    
+    func addBottomBorder(color: UIColor, thickness: CGFloat) {
+            let borderLayer = CALayer()
+            borderLayer.backgroundColor = color.cgColor
+            borderLayer.frame = CGRect(x: 0, y: frame.size.height - thickness, width: frame.size.width, height: thickness)
+            layer.addSublayer(borderLayer)
+    }
 }

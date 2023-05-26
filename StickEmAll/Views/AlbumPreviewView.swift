@@ -44,7 +44,7 @@ class AlbumPreviewView: UIView {
     
     private func styleData() {
         if (albumData != nil) {
-            backgroundColor = albumData!.color
+            backgroundColor = .yellow
             title.text = albumData!.name
         } else {
             backgroundColor = .white.withAlphaComponent(0)

@@ -31,7 +31,7 @@ class Router: AppRouterProtocol{
     }
     
     func openAlbumDetails(code: String) {
-        let albumStickersViewModel = AlbumStickersViewModel(dataSource: albumDataSource)
+        let albumStickersViewModel = AlbumStickersViewModel(dataSource: albumDataSource, albumCode: code)
         let albumStickersViewController = AlbumStickersViewController(viewModel: albumStickersViewModel, router: self)
         navigationController?.pushViewController(albumStickersViewController, animated: true)
     }

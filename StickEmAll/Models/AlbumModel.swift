@@ -1,9 +1,8 @@
 import PureLayout
 
-struct AlbumModel {
+struct AlbumModel: Codable {
     let code: String
     let name: String
-    let color: UIColor
     var numberOfStickers: Int
     var stickers: [Sticker]
     var stickersPerPack: Int?
@@ -13,24 +12,22 @@ struct AlbumModel {
     }
     
     var expectedNumberOfPacks: Float? {
-        guard let stickersPerPack else { return nil }
+        guard let stickersPerPack = stickersPerPack else { return nil }
         //TODO: Add formula
         return 0
     }
     
-    init(code: String, name: String, color: UIColor, numberOfStickers: Int, stickersPerPack: Int, stickers: [Sticker]) {
+    init(code: String, name: String, numberOfStickers: Int, stickersPerPack: Int, stickers: [Sticker]) {
         self.code = code
         self.name = name
-        self.color = color
         self.numberOfStickers = numberOfStickers
         self.stickers = stickers
         self.stickersPerPack = stickersPerPack
     }
     
-    init(code: String, name: String, color: UIColor, numberOfStickers: Int, stickersPerPack: Int) {
+    init(code: String, name: String, numberOfStickers: Int, stickersPerPack: Int) {
         self.code = code
         self.name = name
-        self.color = color
         self.numberOfStickers = numberOfStickers
         self.stickersPerPack = stickersPerPack
         var stickers: [Sticker] = []
@@ -40,10 +37,9 @@ struct AlbumModel {
         self.stickers = stickers
     }
     
-    init(code: String, name: String, color: UIColor, numberOfStickers: Int) {
+    init(code: String, name: String, numberOfStickers: Int) {
         self.code = code
         self.name = name
-        self.color = color
         self.numberOfStickers = numberOfStickers
         self.stickersPerPack = nil
         var stickers: [Sticker] = []
@@ -55,7 +51,7 @@ struct AlbumModel {
     
 }
 
-struct Sticker {
+struct Sticker: Codable {
     let number: Int
     var numberCollected: Int
 }
