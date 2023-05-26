@@ -8,10 +8,10 @@ class AlbumStickersViewModel: ObservableObject {
     
     @Published var albumDetails: AlbumModel? = nil
     
-    init(dataSource: AlbumDataSource) {
+    init(dataSource: AlbumDataSource, albumCode: String) {
         self.dataSource = dataSource
         Task {
-            await getAlbum(id: "album")
+            await getAlbum(id: albumCode)
         }
     }
     
