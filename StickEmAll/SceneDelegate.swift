@@ -17,11 +17,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         else { return }
         
         window = UIWindow(windowScene: windowScene)
-        let albumDataSource = AlbumDataSource()
-        let albumPickerViewModel = AlbumPickerViewModel(dataSource: albumDataSource)
-        let vc = AlbumPickerViewController(viewModel: albumPickerViewModel)
-        window?.rootViewController = vc
-        window?.makeKeyAndVisible()
+        
+        let navigationController = UINavigationController()
+        let dataSource = AlbumDataSource()
+        let router = Router(with: navigationController, dataSource: dataSource)
+        
+        //let vc = LogoViewController(router: router)
+        //window?.rootViewController = vc
+        //window?.makeKeyAndVisible()
+        router.setStartScreen(in: window)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
