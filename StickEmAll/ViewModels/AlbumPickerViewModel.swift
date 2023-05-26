@@ -13,7 +13,8 @@ class AlbumPickerViewModel {
     }
     
     func getAlbumsList() async{
-        self.albums = dataSource.getAlbums()
+        dataSource.getAlbums()
+        self.albums = dataSource.albums
     }
     
 }
