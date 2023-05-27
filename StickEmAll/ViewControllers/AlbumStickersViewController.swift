@@ -29,7 +29,6 @@ class AlbumStickersViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        super.viewDidLoad()
         createViews()
         styleViews()
         defineLayout()
@@ -63,16 +62,20 @@ class AlbumStickersViewController: UIViewController {
     private func styleViews() {
         view.backgroundColor = .white
         
-        stickersCollectionView.backgroundColor = UIColor(red: 1, green: 0.871, blue: 0.349, alpha: 0.6)
+        stickersCollectionView.backgroundColor = .lightYellow
         
-        // navigationItem.title = "Movie List" -> ime albuma kasnije u navigation bar
+        albumNameLabel.font = .boldSystemFont(ofSize: 30)
+        albumNameLabel.text = "test"
+        albumNameLabel.textAlignment = .center
+        albumNameLabel.lineBreakMode = .byWordWrapping
+        albumNameLabel.numberOfLines = 0
         
-        albumNameLabel.font = .boldSystemFont(ofSize: 36)
     }
     
     private func defineLayout() {
         albumNameLabel.autoPinEdge(toSuperviewSafeArea: .top)
-        albumNameLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+        albumNameLabel.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 10)
+        albumNameLabel.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 10)
         
         collectionSuperview.autoPinEdge(toSuperviewSafeArea: .bottom)
         collectionSuperview.autoPinEdge(toSuperviewSafeArea: .leading)

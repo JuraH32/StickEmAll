@@ -131,12 +131,12 @@ class AlbumPickerViewController: UIViewController {
         previousAlbum.autoMatch(.width, to: .width, of: currentAlbum, withMultiplier: 0.5)
         
         nextButton.autoAlignAxis(.horizontal, toSameAxisOf: currentAlbum)
-        nextButton.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: padding / 4)
+        nextButton.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: padding / 4 - 15)
         nextButton.autoSetDimension(.height, toSize: 48)
         nextButton.autoSetDimension(.width, toSize: 48)
         
         previousButton.autoAlignAxis(.horizontal, toSameAxisOf: currentAlbum)
-        previousButton.autoPinEdge(toSuperviewSafeArea: .leading, withInset: padding / 4)
+        previousButton.autoPinEdge(toSuperviewSafeArea: .leading, withInset: padding / 4 - 15)
         previousButton.autoSetDimension(.height, toSize: 48)
         previousButton.autoSetDimension(.width, toSize: 48)
         
@@ -150,7 +150,9 @@ class AlbumPickerViewController: UIViewController {
     
     private func bindData() {
         viewModel.$albums.sink{ [weak self] albums in
-            self?.albums = albums
+            var albumsData = albums
+            albumsData.append(AlbumModel(code: "", name: "", numberOfStickers: 1))
+            self?.albums = albumsData
             DispatchQueue.main.async {
                 self?.updateAlbumPreviews()
             }
@@ -160,12 +162,16 @@ class AlbumPickerViewController: UIViewController {
     private func updateAlbumPreviews() {
         guard !albums.isEmpty else { return }
         let previous = albumIndex > 0 ? albums[albumIndex - 1] : nil
-        previousAlbum.updateData(albumData: previous)
+        previousAlbum.updateData(albumData: previous, colorID: 1)
         let current = albums[albumIndex]
-        currentAlbum.updateData(albumData: current)
+        if (current.code != "") {
+            currentAlbum.updateData(albumData: current, colorID: 0)
+        } else {
+            currentAlbum.updateData(albumData: current, colorID: 2)
+        }
         albumStatsView.setAlbumData(albumData: current)
         let next = albumIndex < albums.count - 1 ? albums[albumIndex + 1] : nil
-        nextAlbum.updateData(albumData: next)
+        nextAlbum.updateData(albumData: next, colorID: 1)
     }
     
     @objc private func handleNext() {
@@ -232,7 +238,11 @@ class AlbumPickerViewController: UIViewController {
     
     @objc private func handleOpenDetails(_ gestureRecognizer: UITapGestureRecognizer) {
         if gestureRecognizer.state == .ended {
-            router.openAlbumDetails(code: albums[albumIndex].code)
+            if currentAlbum.albumData?.code == "" {
+                router.openCreateAlbum()
+            } else {
+                router.openAlbumDetails(code: albums[albumIndex].code)
+            }
         }
     }
 }

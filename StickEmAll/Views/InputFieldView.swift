@@ -55,7 +55,7 @@ class InputFieldView: UIView {
         
         label.text = labelText
         let placeholder = NSAttributedString(string: inputFieldDefaultText,
-                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+                                             attributes: [.foregroundColor: UIColor.lightGray])
         inputField.attributedPlaceholder = placeholder
     }
     
@@ -63,7 +63,11 @@ class InputFieldView: UIView {
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textColor = .white
         
-        inputFieldContainer.backgroundColor = fieldColor
+        inputField.textColor = .white
+        
+        inputFieldContainer.backgroundColor = .lightBlurple
+        inputFieldContainer.layer.borderColor = UIColor.blurple.cgColor
+        inputFieldContainer.layer.borderWidth = 0.5
         inputFieldContainer.layer.cornerRadius = 10
         
     }

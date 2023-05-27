@@ -44,14 +44,14 @@ class StickerCell: UICollectionViewCell {
         //self.backgroundColor = .blue
         self.alpha = 0
         
-        stickerFrame.backgroundColor = UIColor(red: 1, green: 0.871, blue: 0.349, alpha: 1)
+        stickerFrame.backgroundColor = .darkYellow
         
         duplicateFrame.backgroundColor = UIColor(red: 0.322, green: 0.443, blue: 1, alpha: 0.5)
         duplicateFrame.isHidden = true
         self.sendSubviewToBack(duplicateFrame)
         
         numberLabel.textColor = .black
-        numberLabel.font = .boldSystemFont(ofSize: 40)
+        numberLabel.font = .boldSystemFont(ofSize: 25)
         numberLabel.textAlignment = .center
         
     }

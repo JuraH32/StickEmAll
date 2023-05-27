@@ -7,7 +7,6 @@ class AlbumFormView: UIView {
     var inputFieldStickerNumber: InputFieldView!
     var inputFieldPacketCount: InputFieldView!
     
-    let formBackgroundColor = UIColor(red: 0.322, green: 0.443, blue: 1, alpha: 0.6)
     
     init() {
         super.init(frame: .zero)
@@ -21,7 +20,7 @@ class AlbumFormView: UIView {
     }
     
     private func createViews() {
-        inputFieldCode = InputFieldView(label: "Album barcode", placeholder: "0000000000000", isNumber: false)
+        inputFieldCode = InputFieldView(label: "Album barcode", placeholder: "", isNumber: false)
         self.addSubview(inputFieldCode)
         
         inputFieldName = InputFieldView(label: "Album name", placeholder: "Album 1", isNumber: false)
@@ -35,7 +34,8 @@ class AlbumFormView: UIView {
     }
     
     private func styleViews() {
-        self.backgroundColor = formBackgroundColor
+        self.backgroundColor = .blurple
+        self.alpha = 0.85
         self.layer.cornerRadius = 40
     }
     

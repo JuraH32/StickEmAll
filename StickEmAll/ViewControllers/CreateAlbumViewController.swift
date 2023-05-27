@@ -1,6 +1,9 @@
 import PureLayout
 
 class CreateAlbumViewController: UIViewController {
+    
+    private let router: Router!
+    
     var viewTitle: UILabel!
     var barcodeView: AlbumBarcodeView!
     var formView: AlbumFormView!
@@ -10,8 +13,9 @@ class CreateAlbumViewController: UIViewController {
     
     let padding = 20.0
     
-    init(viewModel: CreateAlbumViewModel) {
+    init(viewModel: CreateAlbumViewModel, router: Router) {
         self.viewModel = viewModel
+        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -27,7 +31,7 @@ class CreateAlbumViewController: UIViewController {
     
     private func createViews() {
         viewTitle = UILabel()
-        view.addSubview(viewTitle)
+        navigationItem.titleView = viewTitle
         
         barcodeView = AlbumBarcodeView()
         view.addSubview(barcodeView)
@@ -47,28 +51,29 @@ class CreateAlbumViewController: UIViewController {
         view.backgroundColor = .white
         
         viewTitle.text = "New album"
+        viewTitle.font = .boldSystemFont(ofSize: 30)
         
         createButton.setTitleColor(.black, for: .normal)
-        createButton.layer.borderWidth = 1.0
         createButton.layer.cornerRadius = 10
-        createButton.backgroundColor = .blue
+        createButton.backgroundColor = .lightBlurple
         
-        createButtonLabel.text = "Add new album"
+        createButtonLabel.text = "Add album"
         createButtonLabel.textColor = .white
     }
     
     private func defineLayoutForViews() {
-        viewTitle.autoAlignAxis(toSuperviewAxis: .vertical)
-        viewTitle.autoPinEdge(toSuperviewSafeArea: .top, withInset: padding)
+        //viewTitle.autoAlignAxis(toSuperviewAxis: .vertical)
+        //viewTitle.autoPinEdge(toSuperviewSafeArea: .top, withInset: padding)
         
         barcodeView.autoAlignAxis(toSuperviewAxis: .vertical)
-        barcodeView.autoPinEdge(.top, to: .bottom, of: viewTitle, withOffset: padding)
-        barcodeView.autoMatch(.width, to: .width, of: view, withMultiplier: 0.75)
+        barcodeView.autoPinEdge(toSuperviewSafeArea: .top, withInset: padding)
+        //barcodeView.autoPinEdge(.top, to: .bottom, of: viewTitle, withOffset: padding)
+        barcodeView.autoMatch(.width, to: .width, of: view, withMultiplier: 0.85)
         barcodeView.autoSetDimension(.height, toSize: 200)
         
         formView.autoAlignAxis(toSuperviewAxis: .vertical)
         formView.autoPinEdge(.top, to: .bottom, of: barcodeView, withOffset: padding)
-        formView.autoMatch(.width, to: .width, of: view, withMultiplier: 0.75)
+        formView.autoMatch(.width, to: .width, of: view, withMultiplier: 0.85)
         
         createButton.autoAlignAxis(toSuperviewAxis: .vertical)
         createButton.autoPinEdge(.top, to: .bottom, of: formView, withOffset: padding)
@@ -83,5 +88,6 @@ class CreateAlbumViewController: UIViewController {
         let numberOfStickers = Int(formView.inputFieldStickerNumber.inputField.text!) ?? 0
         let numberOfStickerPerPack = Int(formView.inputFieldStickerNumber.inputField.text!) ?? 0
         viewModel.createAlbum(code: code, name: name, numberOfSticker: numberOfStickers, numberOfStickerPerPack: numberOfStickerPerPack)
+        router.addedAlbum()
     }
 }
