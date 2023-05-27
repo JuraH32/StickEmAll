@@ -12,6 +12,8 @@ class AlbumStickersViewController: UIViewController {
     private var stickersCollectionView: UICollectionView!
     private var collectionSuperview: UIView!
     private var albumNameLabel: UILabel!
+    private var addModeButton: UIButton!
+    private var modeSwitch: ModeSwitchView!
     
     private var albumDetails: AlbumModel?
     private var disposable = Set<AnyCancellable>()
@@ -57,6 +59,14 @@ class AlbumStickersViewController: UIViewController {
         stickersCollectionView.delegate = self
         stickersCollectionView.register(StickerCell.self, forCellWithReuseIdentifier: StickerCell.reuseIdentifier)
         collectionSuperview.addSubview(stickersCollectionView)
+        
+        addModeButton = UIButton()
+        view.addSubview(addModeButton)
+        view.bringSubviewToFront(addModeButton)
+        
+        modeSwitch = ModeSwitchView()
+        view.addSubview(modeSwitch)
+        view.bringSubviewToFront(modeSwitch)
     }
     
     private func styleViews() {
@@ -70,6 +80,15 @@ class AlbumStickersViewController: UIViewController {
         albumNameLabel.lineBreakMode = .byWordWrapping
         albumNameLabel.numberOfLines = 0
         
+<<<<<<< HEAD
+=======
+        albumNameLabel.font = .boldSystemFont(ofSize: 36)
+        
+        addModeButton.layer.cornerRadius = 32
+        addModeButton.backgroundColor = .blue
+        addModeButton.setTitle("+", for: .normal)
+        
+>>>>>>> 230b4c2 (saving changes)
     }
     
     private func defineLayout() {
@@ -84,6 +103,15 @@ class AlbumStickersViewController: UIViewController {
         
         stickersCollectionView.autoPinEdgesToSuperviewEdges()
         
+        addModeButton.autoSetDimension(.width, toSize: 64)
+        addModeButton.autoMatch(.height, to: .width, of: addModeButton)
+        addModeButton.autoAlignAxis(toSuperviewAxis: .vertical)
+        addModeButton.autoPinEdge(toSuperviewSafeArea: .bottom, withInset: 20)
+        
+        modeSwitch.autoAlignAxis(toSuperviewAxis: .vertical)
+        modeSwitch.autoPinEdge(.top, to: .bottom, of: albumNameLabel, withOffset: 20)
+        modeSwitch.autoMatch(.width, to: .width, of: view, withMultiplier: 0.5)
+//
     }
     
     private func bindData() {
