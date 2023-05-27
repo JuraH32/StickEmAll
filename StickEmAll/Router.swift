@@ -19,6 +19,10 @@ class Router: AppRouterProtocol{
     func setStartScreen(in window: UIWindow?) {
         let logoViewController = LogoViewController(router: self)
         navigationController?.pushViewController(logoViewController, animated: true)
+        navigationController?.navigationBar.tintColor = .black
+        
+        //let createAlbumViewModel = CreateAlbumViewModel(dataSource: albumDataSource)
+        //let createAlbumViewController = CreateAlbumViewController(viewModel: createAlbumViewModel, router: self)
         
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
@@ -34,5 +38,15 @@ class Router: AppRouterProtocol{
         let albumStickersViewModel = AlbumStickersViewModel(dataSource: albumDataSource, albumCode: code)
         let albumStickersViewController = AlbumStickersViewController(viewModel: albumStickersViewModel, router: self)
         navigationController?.pushViewController(albumStickersViewController, animated: true)
+    }
+    
+    func openCreateAlbum() {
+        let createAlbumViewModel = CreateAlbumViewModel(dataSource: albumDataSource)
+        let createAlbumViewController = CreateAlbumViewController(viewModel: createAlbumViewModel, router: self)
+        navigationController?.pushViewController(createAlbumViewController, animated: true)
+    }
+    
+    func addedAlbum() {
+        navigationController?.popViewController(animated: true)
     }
 }

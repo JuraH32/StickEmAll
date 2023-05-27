@@ -45,7 +45,7 @@ class AlbumStatsView: UIView {
         self.backgroundColor = .blue.withAlphaComponent(0)
         self.translatesAutoresizingMaskIntoConstraints = false
         
-        viewHeader.backgroundColor = .yellow
+        viewHeader.backgroundColor = .lightYellow //.yellow
         stickerLabel.text = "Stickers"
         stickerLabel.font = .systemFont(ofSize: 24)
         stickerLabel.textAlignment = .center
@@ -53,7 +53,7 @@ class AlbumStatsView: UIView {
         stickerCollected.font = .boldSystemFont(ofSize: 32)
         stickerCollected.textAlignment = .center
         
-        viewBody.backgroundColor = .yellow
+        viewBody.backgroundColor = .lightYellow //.yellow
     }
     
     private func defineLayoutForViews() {
