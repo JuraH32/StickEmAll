@@ -21,10 +21,11 @@ class Router: AppRouterProtocol{
         navigationController?.pushViewController(logoViewController, animated: true)
         navigationController?.navigationBar.tintColor = .black
         
-        //let createAlbumViewModel = CreateAlbumViewModel(dataSource: albumDataSource)
-        //let createAlbumViewController = CreateAlbumViewController(viewModel: createAlbumViewModel, router: self)
+        let exchangeViewModel = ExchangeViewModel(dataSource: albumDataSource, exchangeCode: "")
+        let exchangeViewController = ExchangeViewController(viewModel: exchangeViewModel, router: self, exchangeCode: "")
         
-        window?.rootViewController = navigationController
+        
+        window?.rootViewController = exchangeViewController
         window?.makeKeyAndVisible()
     }
     
@@ -48,5 +49,9 @@ class Router: AppRouterProtocol{
     
     func addedAlbum() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    func handleExchange() {
+        // TODO
     }
 }
