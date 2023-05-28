@@ -50,4 +50,8 @@ class Router: AppRouterProtocol{
     func addedAlbum() {
         navigationController?.popViewController(animated: true)
     }
+    
+    func handleExchange() {
+        // TODO
+    }
 }

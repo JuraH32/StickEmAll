@@ -49,6 +49,7 @@ class ExchangeViewController: UIViewController {
         
         exchangeButton = UIButton()
         contentContainer.addSubview(exchangeButton)
+        exchangeButton.addTarget(self, action: #selector(handleExchange), for: .touchUpInside)
         
         exchangeView = UIView()
         exchangeButton.addSubview(exchangeView)
@@ -148,6 +149,11 @@ class ExchangeViewController: UIViewController {
                 self?.albumNameLabel.text = self?.exchangeData?.name
             }
         }.store(in: &disposable)
+    }
+    
+    @objc func handleExchange() {
+        // TODO
+        router.handleExchange()
     }
 }
 
