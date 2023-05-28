@@ -8,9 +8,12 @@
 import PureLayout
 
 class ModeSwitchView: UIView {
-    var addLabel: UILabel!
-    var removeLabel: UILabel!
-    var buttonView: UIButton!
+    var addButton: UIButton!
+    var removeButton: UIButton!
+    var state: Bool = true
+    var selectedView: UIView!
+    
+    var selectedConstraint: NSLayoutConstraint!
     
     init() {
         super.init(frame: .zero)
@@ -29,38 +32,70 @@ class ModeSwitchView: UIView {
     }
     
     private func createViews() {
-        buttonView = UIButton()
-        addSubview(buttonView)
+        selectedView = UIView()
+        addSubview(selectedView)
         
-        addLabel = UILabel()
-        buttonView.addSubview(addLabel)
-        buttonView.bringSubviewToFront(addLabel)
+        addButton = UIButton()
+        addButton.addTarget(self, action: #selector(toggleAdd), for: .touchUpInside)
+        addSubview(addButton)
+        bringSubviewToFront(addButton)
         
-        removeLabel = UILabel()
-        buttonView.addSubview(removeLabel)
-        buttonView.bringSubviewToFront(removeLabel)
-        
+        removeButton = UIButton()
+        removeButton.addTarget(self, action: #selector(toggleRemove), for: .touchUpInside)
+        addSubview(removeButton)
+        bringSubviewToFront(removeButton)
     }
     
     private func style() {
-        self.layer.cornerRadius = 20
-        self.backgroundColor = .lightGray
+        layer.cornerRadius = 16
+        backgroundColor = .lightGray.withAlphaComponent(0.3)
         
-        addLabel.text = "Add"
-        removeLabel.text = "Remove"
+        addButton.setTitle("Add", for: .normal)
+        removeButton.setTitle("Remove", for: .normal)
         
-        addLabel.textAlignment = .center
-        removeLabel.textAlignment = .center
+        selectedView.backgroundColor = .green
+        selectedView.clipsToBounds = true
+        selectedView.layer.cornerRadius = 16
     }
     
     private func layout() {
-        buttonView.autoPinEdgesToSuperviewSafeArea()
+        addButton.autoPinEdgesToSuperviewSafeArea(with: .zero, excludingEdge: .trailing)
+        removeButton.autoPinEdgesToSuperviewSafeArea(with: .zero, excludingEdge: .leading)
         
-        addLabel.autoPinEdgesToSuperviewSafeArea(with: .zero, excludingEdge: .trailing)
-        removeLabel.autoPinEdgesToSuperviewSafeArea(with: .zero, excludingEdge: .leading)
+        addButton.autoMatch(.width, to: .width, of: self, withMultiplier: 0.5)
+        removeButton.autoMatch(.width, to: .width, of: addButton)
         
-        addLabel.autoMatch(.width, to: .width, of: self, withMultiplier: 0.5)
-        removeLabel.autoMatch(.width, to: .width, of: addLabel)
+        selectedView.autoAlignAxis(toSuperviewAxis: .horizontal)
+        selectedView.autoMatch(.width, to: .width, of: self, withMultiplier: 0.5)
+        selectedView.autoMatch(.height, to: .height, of: self)
+        selectedConstraint = selectedView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0)
+        
+        
+        NSLayoutConstraint.activate([selectedConstraint])
+    }
+    
+    @objc private func toggleAdd() {
+        if (state) {
+            return
+        }
+        state = true
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
+            self.selectedConstraint.constant = 0
+            self.selectedView.backgroundColor = .green
+            self.layoutIfNeeded()
+        }
+    }
+    
+    @objc private func toggleRemove() {
+        if (!state) {
+            return
+        }
+        state = false
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
+            self.selectedConstraint.constant = self.bounds.width / 2
+            self.selectedView.backgroundColor = .red
+            self.layoutIfNeeded()
+        }
     }
 }
 

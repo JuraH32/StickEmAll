@@ -35,12 +35,10 @@ class AlbumDataSource {
             print("Invalid file URL")
             return
         }
-        print("Fetching albums...")
         do {
             let data = try Data(contentsOf: fileURL)
             let decoder = JSONDecoder()
             let albums = try decoder.decode([AlbumModel].self, from: data)
-            print(albums)
             self.albums = albums
         } catch {
             print("Failed to load albums: \(error)")
@@ -57,10 +55,14 @@ class AlbumDataSource {
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
             getAlbums()
-            albums.append(album)
+            if albums.contains(where: {$0.code == album.code}) {
+                let index = albums.firstIndex(where: {$0.code == album.code})!
+                albums[index] = album
+            } else {
+                albums.append(album)
+            }
             let encodedData = try encoder.encode(albums)
             try encodedData.write(to: fileURL)
-            print("Saved album")
         } catch {
             print("Failed to save albums: \(error)")
         }
