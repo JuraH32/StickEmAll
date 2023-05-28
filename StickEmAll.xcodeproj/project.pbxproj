@@ -10,6 +10,9 @@
 		6E1624F52A1F373600AB2714 /* StickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1624F42A1F373600AB2714 /* StickerCell.swift */; };
 		6E1624FC2A1FDB0C00AB2714 /* LogoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1624FB2A1FDB0C00AB2714 /* LogoViewController.swift */; };
 		6E1625002A1FFD5100AB2714 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1624FF2A1FFD5100AB2714 /* Router.swift */; };
+		6E1625022A2294F100AB2714 /* ExchangeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1625012A2294F100AB2714 /* ExchangeViewModel.swift */; };
+		6E1625042A2295C300AB2714 /* ExchangeVewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1625032A2295C300AB2714 /* ExchangeVewController.swift */; };
+		6E1625062A22A72F00AB2714 /* ExchangeStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1625052A22A72F00AB2714 /* ExchangeStickerCell.swift */; };
 		6E44396B2A1EBB2B00CA0AB5 /* AlbumStickersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E44396A2A1EBB2B00CA0AB5 /* AlbumStickersViewController.swift */; };
 		6E44396D2A1EBBD000CA0AB5 /* AlbumStickersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E44396C2A1EBBD000CA0AB5 /* AlbumStickersViewModel.swift */; };
 		6E46E3CD2A1C92110074ED12 /* AlbumPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E46E3CC2A1C92110074ED12 /* AlbumPickerViewController.swift */; };
@@ -37,6 +40,9 @@
 		6E1624F42A1F373600AB2714 /* StickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerCell.swift; sourceTree = "<group>"; };
 		6E1624FB2A1FDB0C00AB2714 /* LogoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoViewController.swift; sourceTree = "<group>"; };
 		6E1624FF2A1FFD5100AB2714 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		6E1625012A2294F100AB2714 /* ExchangeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeViewModel.swift; sourceTree = "<group>"; };
+		6E1625032A2295C300AB2714 /* ExchangeVewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeVewController.swift; sourceTree = "<group>"; };
+		6E1625052A22A72F00AB2714 /* ExchangeStickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeStickerCell.swift; sourceTree = "<group>"; };
 		6E44396A2A1EBB2B00CA0AB5 /* AlbumStickersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumStickersViewController.swift; sourceTree = "<group>"; };
 		6E44396C2A1EBBD000CA0AB5 /* AlbumStickersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumStickersViewModel.swift; sourceTree = "<group>"; };
 		6E46E3CC2A1C92110074ED12 /* AlbumPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumPickerViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +95,7 @@
 				6E92E67B2A1DE115008F9636 /* AlbumBarcodeView.swift */,
 				6E92E67D2A1DE140008F9636 /* AlbumFormView.swift */,
 				6E92E67F2A1E8BEE008F9636 /* InputFieldView.swift */,
+				6E1625052A22A72F00AB2714 /* ExchangeStickerCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -100,6 +107,7 @@
 				6E44396A2A1EBB2B00CA0AB5 /* AlbumStickersViewController.swift */,
 				6E1624FB2A1FDB0C00AB2714 /* LogoViewController.swift */,
 				6E92E6792A1DE08E008F9636 /* CreateAlbumViewController.swift */,
+				6E1625032A2295C300AB2714 /* ExchangeVewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -110,6 +118,7 @@
 				6E46E3D82A1C96240074ED12 /* AlbumPickerViewModel.swift */,
 				6E44396C2A1EBBD000CA0AB5 /* AlbumStickersViewModel.swift */,
 				6E92E6812A1FE9A6008F9636 /* CreateAlbumViewModel.swift */,
+				6E1625012A2294F100AB2714 /* ExchangeViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -246,9 +255,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E92E67A2A1DE08E008F9636 /* CreateAlbumViewController.swift in Sources */,
+				6E1625022A2294F100AB2714 /* ExchangeViewModel.swift in Sources */,
 				6E92E6822A1FE9A6008F9636 /* CreateAlbumViewModel.swift in Sources */,
 				6E46E3CD2A1C92110074ED12 /* AlbumPickerViewController.swift in Sources */,
 				6E46E3D72A1C953C0074ED12 /* AlbumModel.swift in Sources */,
+				6E1625042A2295C300AB2714 /* ExchangeVewController.swift in Sources */,
 				6E92E6802A1E8BEE008F9636 /* InputFieldView.swift in Sources */,
 				6EE65CF02A1BD690005447E6 /* ViewController.swift in Sources */,
 				6E1624FC2A1FDB0C00AB2714 /* LogoViewController.swift in Sources */,
@@ -264,6 +275,7 @@
 				6E44396B2A1EBB2B00CA0AB5 /* AlbumStickersViewController.swift in Sources */,
 				6E92E67E2A1DE140008F9636 /* AlbumFormView.swift in Sources */,
 				6E46E3DF2A1D4C020074ED12 /* AlbumStatsView.swift in Sources */,
+				6E1625062A22A72F00AB2714 /* ExchangeStickerCell.swift in Sources */,
 				6E46E3DD2A1C9C840074ED12 /* AlbumPreviewView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

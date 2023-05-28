@@ -55,3 +55,10 @@ struct Sticker: Codable {
     let number: Int
     var numberCollected: Int
 }
+
+struct Exchange {
+    let code: String
+    let name: String
+    var recieve: [Int]
+    var give: [Int]
+}

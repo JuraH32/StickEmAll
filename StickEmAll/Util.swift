@@ -29,4 +29,6 @@ extension UIColor {
     static let blurple = UIColor(red: 0.322, green: 0.443, blue: 1, alpha: 1)
     
     static let lightBlurple = UIColor(red: 0.433, green: 0.535, blue: 1, alpha: 1) //UIColor(red: 0.525, green: 0.61, blue: 1, alpha: 1)
+    
+    static let lightRed = UIColor(red: 1, green: 0.367, blue: 0.367, alpha: 1)
 }
