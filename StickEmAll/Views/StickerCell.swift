@@ -55,7 +55,6 @@ class StickerCell: UICollectionViewCell {
     }
     
     private func styleViews() {
-        //self.backgroundColor = .blue
         self.alpha = 0
         
         stickerFrame.backgroundColor = .darkYellow
@@ -69,9 +68,7 @@ class StickerCell: UICollectionViewCell {
         numberLabel.textAlignment = .center
         
         stickerNumberLabel.text = "(0)"
-        stickerNumberLabel.font = .systemFont(ofSize: 16)
-        
-        
+        stickerNumberLabel.font = .systemFont(ofSize: 12)
     }
     
     private func defineLayout() {
@@ -87,8 +84,8 @@ class StickerCell: UICollectionViewCell {
         
         numberLabel.autoPinEdgesToSuperviewEdges()
         
-        stickerNumberLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 4)
-        stickerNumberLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: 4)
+        stickerNumberLabel.autoPinEdge(toSuperviewEdge: .top)
+        stickerNumberLabel.autoPinEdge(toSuperviewEdge: .trailing)
     }
     
     public func setData(number: Int, collected: Int, change: Int?, addState: Bool, changeFunction: @escaping ChangeCountFunction) {

@@ -37,10 +37,16 @@ class AlbumPickerViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         createViews()
         styleViews()
         defineLayoutForViews()
         bindData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.reloadAlbums()
     }
     
     override func viewDidLayoutSubviews() {
@@ -149,14 +155,23 @@ class AlbumPickerViewController: UIViewController {
     }
     
     private func bindData() {
-        viewModel.$albums.sink{ [weak self] albums in
-            var albumsData = albums
-            albumsData.append(AlbumModel(code: "", name: "", numberOfStickers: 1))
-            self?.albums = albumsData
-            DispatchQueue.main.async {
+//        viewModel.$albums.sink{ [weak self] albums in
+//            var albumsData = albums
+//            albumsData.append(AlbumModel(code: "", name: "", numberOfStickers: 1))
+//            self?.albums = albumsData
+//            DispatchQueue.main.async {
+//                self?.updateAlbumPreviews()
+//            }
+//        }.store(in: &disposables)
+        viewModel.$albums
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] albums in
+                var albumsData = albums
+                albumsData.append(AlbumModel(code: "", name: "", numberOfStickers: 1))
+                self?.albums = albumsData
                 self?.updateAlbumPreviews()
             }
-        }.store(in: &disposables)
+            .store(in: &disposables)
     }
     
     private func updateAlbumPreviews() {
