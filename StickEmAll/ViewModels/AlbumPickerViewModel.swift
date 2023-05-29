@@ -20,12 +20,12 @@ class AlbumPickerViewModel: ObservableObject {
     }
     
     func reloadAlbums() {
-            DispatchQueue.global().async {
-                self.dataSource.getAlbums()
-                let updatedAlbums: [AlbumModel] = self.dataSource.albums
-                DispatchQueue.main.async {
-                    self.albums = updatedAlbums
-                }
+        DispatchQueue.global().async {
+            self.dataSource.getAlbums()
+            let updatedAlbums: [AlbumModel] = self.dataSource.albums
+            DispatchQueue.main.async {
+                self.albums = updatedAlbums
             }
         }
+    }
 }

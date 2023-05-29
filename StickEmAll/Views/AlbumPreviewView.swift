@@ -71,8 +71,10 @@ class AlbumPreviewView: UIView {
         addView.alpha = 0
         if (albumData?.code == "") {
             addView.alpha = 1
-            self.layer.borderWidth = 2
+            self.layer.borderWidth = 3
             self.layer.borderColor = UIColor.black.cgColor
+        } else {
+            self.layer.borderWidth = 0
         }
     }
     
