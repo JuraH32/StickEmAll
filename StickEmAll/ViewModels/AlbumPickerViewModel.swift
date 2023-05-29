@@ -1,6 +1,6 @@
 import Combine
 
-class AlbumPickerViewModel {
+class AlbumPickerViewModel: ObservableObject {
     private let dataSource: AlbumDataSource
     
     @Published var albums: [AlbumModel] = []

@@ -43,8 +43,8 @@ struct AlbumModel: Codable {
         self.numberOfStickers = numberOfStickers
         self.stickersPerPack = nil
         var stickers: [Sticker] = []
-        for i in 0...numberOfStickers-1 {
-            stickers.append(Sticker(number: i+1, numberCollected: 0))
+        for i in 1...numberOfStickers {
+            stickers.append(Sticker(number: i, numberCollected: 0))
         }
         self.stickers = stickers
     }
