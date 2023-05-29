@@ -46,21 +46,25 @@ class AlbumDataSource {
     }
     
     func saveAlbum(album: AlbumModel) {
+        getAlbums()
+        if albums.contains(where: {$0.code == album.code}) {
+            let index = albums.firstIndex(where: {$0.code == album.code})!
+            albums[index] = album
+        } else {
+            albums.append(album)
+        }
+        saveAlbums()
+    }
+    
+    func saveAlbums() {
         guard let fileURL = documentsDirectory?.appendingPathComponent("albums.json") else {
                 print("Invalid file URL")
                 return
         }
-        
+        print ("Saving Albums...")
         do {
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
-            getAlbums()
-            if albums.contains(where: {$0.code == album.code}) {
-                let index = albums.firstIndex(where: {$0.code == album.code})!
-                albums[index] = album
-            } else {
-                albums.append(album)
-            }
             let encodedData = try encoder.encode(albums)
             try encodedData.write(to: fileURL)
         } catch {
@@ -73,6 +77,7 @@ class AlbumDataSource {
             for sticker in changedStickers {
                 albums[index].stickers[sticker.number - 1].numberCollected += sticker.numberCollected
             }
+            saveAlbums()
         } else {
             print("No album found with code: " + albumCode)
         }

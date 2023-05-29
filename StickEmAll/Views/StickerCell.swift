@@ -10,7 +10,7 @@ class StickerCell: UICollectionViewCell {
     private var stickerFrame: UIView!
     private var duplicateFrame: UIView!
     private var numberLabel: UILabel!
-    private var changeLabel: UILabel!
+    private var stickerNumberLabel: UILabel!
     
     private var number: Int!
     private var noCollected: Int!
@@ -44,9 +44,9 @@ class StickerCell: UICollectionViewCell {
         numberLabel = UILabel()
         stickerFrame.addSubview(numberLabel)
         
-        changeLabel = UILabel()
-        addSubview(changeLabel)
-        bringSubviewToFront(changeLabel)
+        stickerNumberLabel = UILabel()
+        addSubview(stickerNumberLabel)
+        bringSubviewToFront(stickerNumberLabel)
         
         let touchStickerGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         touchStickerGesture.numberOfTouchesRequired = 1
@@ -68,9 +68,8 @@ class StickerCell: UICollectionViewCell {
         numberLabel.font = .boldSystemFont(ofSize: 25)
         numberLabel.textAlignment = .center
         
-        changeLabel.isHidden = true
-        changeLabel.text = "(0)"
-        changeLabel.font = .systemFont(ofSize: 16)
+        stickerNumberLabel.text = "(0)"
+        stickerNumberLabel.font = .systemFont(ofSize: 16)
         
         
     }
@@ -88,8 +87,8 @@ class StickerCell: UICollectionViewCell {
         
         numberLabel.autoPinEdgesToSuperviewEdges()
         
-        changeLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 4)
-        changeLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: 4)
+        stickerNumberLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 4)
+        stickerNumberLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: 4)
     }
     
     public func setData(number: Int, collected: Int, change: Int?, addState: Bool, changeFunction: @escaping ChangeCountFunction) {
@@ -98,21 +97,20 @@ class StickerCell: UICollectionViewCell {
         noCollected = collected
         
         numberLabel.text = String(number)
-    
+        stickerNumberLabel.textColor = .black
+        
         let collected = noCollected + (change ?? 0)
         
         if change != nil && addState {
-            changeLabel.isHidden = false
-            changeLabel.text = "(\(String(describing: change!)))"
+            let changeNumber = abs(change!)
+            stickerNumberLabel.text = "(\(String(describing: noCollected!)) \(change! >= 0 ? "+" : "-") \(changeNumber))"
             if change! > 0 {
-                changeLabel.textColor = .green
+                stickerNumberLabel.textColor = .green
             } else if change! < 0 {
-                changeLabel.textColor = .red
-            } else {
-                changeLabel.textColor = .black
+                stickerNumberLabel.textColor = .red
             }
         } else {
-            changeLabel.isHidden = true
+            stickerNumberLabel.text = "(\(String(describing: noCollected!)))"
         }
         if collected == 0 {
             stickerFrame.backgroundColor = .darkYellow
