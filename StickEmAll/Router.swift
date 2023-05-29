@@ -21,11 +21,11 @@ class Router: AppRouterProtocol{
         navigationController?.pushViewController(logoViewController, animated: true)
         navigationController?.navigationBar.tintColor = .black
         
-        let exchangeViewModel = ExchangeViewModel(dataSource: albumDataSource, exchangeCode: "")
-        let exchangeViewController = ExchangeViewController(viewModel: exchangeViewModel, router: self, exchangeCode: "")
+        //let exchangeViewModel = ExchangeViewModel(dataSource: albumDataSource, exchangeCode: "")
+        //let exchangeViewController = ExchangeViewController(viewModel: exchangeViewModel, router: self, exchangeCode: "")
         
         
-        window?.rootViewController = exchangeViewController
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
     

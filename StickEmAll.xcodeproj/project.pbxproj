@@ -97,11 +97,8 @@
 				6E92E67B2A1DE115008F9636 /* AlbumBarcodeView.swift */,
 				6E92E67D2A1DE140008F9636 /* AlbumFormView.swift */,
 				6E92E67F2A1E8BEE008F9636 /* InputFieldView.swift */,
-<<<<<<< HEAD
 				6E1625052A22A72F00AB2714 /* ExchangeStickerCell.swift */,
-=======
 				6E92E6832A221926008F9636 /* ModeSwitchView.swift */,
->>>>>>> 433bc67 (saving changes)
 			);
 			path = Views;
 			sourceTree = "<group>";
