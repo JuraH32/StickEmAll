@@ -106,9 +106,12 @@ class AlbumStickersViewController: UIViewController {
         albumNameLabel.numberOfLines = 0
         
         addModeButton.layer.cornerRadius = 32
-        addModeButton.backgroundColor = .blue
-        addModeButton.setTitle("+", for: .normal)
-        
+        addModeButton.backgroundColor = .lightRed // or .lightblurple or .blurple ?
+        addModeButton.layer.borderWidth = 3
+        addModeButton.layer.borderColor = UIColor.white.cgColor
+        addModeButton.setImage(UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .bold)), for: .normal)
+        addModeButton.tintColor = .white
+
         cancelmageView.tintColor = .red
         cancelAddModeButton.isHidden = true
         

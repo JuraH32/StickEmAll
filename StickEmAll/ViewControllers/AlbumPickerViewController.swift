@@ -37,10 +37,16 @@ class AlbumPickerViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         createViews()
         styleViews()
         defineLayoutForViews()
         bindData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.reloadAlbums()
     }
     
     override func viewDidLayoutSubviews() {
@@ -95,25 +101,25 @@ class AlbumPickerViewController: UIViewController {
         
         viewTitleLabel.text = "My Albums"
         viewTitleLabel.textAlignment = .center
+        viewTitleLabel.font = .boldSystemFont(ofSize: 30)
         
         let nextArrow = UIImage(systemName: "chevron.right.circle")
         nextButton.setImage(nextArrow, for: .normal)
         nextButton.contentVerticalAlignment = .fill
         nextButton.contentHorizontalAlignment = .fill
-        nextButton.tintColor = .gray.withAlphaComponent(0.9)
+        nextButton.tintColor = .black.withAlphaComponent(0.9)
         let previousArrow = UIImage(systemName: "chevron.left.circle")
         previousButton.setImage(previousArrow, for: .normal)
         previousButton.contentVerticalAlignment = .fill
         previousButton.contentHorizontalAlignment = .fill
-        previousButton.tintColor = .gray.withAlphaComponent(0.9)
-        
-        
+        previousButton.tintColor = .black.withAlphaComponent(0.9)
     }
+    
     private func defineLayoutForViews() {
-        viewTitleLabel.autoPinEdge(toSuperviewSafeArea: .top, withInset: 20)
+        viewTitleLabel.autoPinEdge(toSuperviewSafeArea: .top)//, withInset: 20)
         viewTitleLabel.autoPinEdge(toSuperviewSafeArea: .leading, withInset: padding)
         viewTitleLabel.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: padding)
-        viewTitleLabel.autoSetDimension(.height, toSize: 20)
+        viewTitleLabel.autoSetDimension(.height, toSize: 35)
         
         currentAlbum.autoPinEdge(toSuperviewSafeArea: .leading, withInset: padding)
         currentAlbum.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: padding)
@@ -130,12 +136,14 @@ class AlbumPickerViewController: UIViewController {
         previousAlbum.autoMatch(.height, to: .height, of: currentAlbum, withMultiplier: 0.5)
         previousAlbum.autoMatch(.width, to: .width, of: currentAlbum, withMultiplier: 0.5)
         
-        nextButton.autoAlignAxis(.horizontal, toSameAxisOf: currentAlbum)
+        //nextButton.autoAlignAxis(.horizontal, toSameAxisOf: currentAlbum, withOffset: 40)
+        nextButton.autoPinEdge(.top, to: .bottom, of: nextAlbum, withOffset: 30)
         nextButton.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: padding / 4 - 15)
         nextButton.autoSetDimension(.height, toSize: 48)
         nextButton.autoSetDimension(.width, toSize: 48)
         
-        previousButton.autoAlignAxis(.horizontal, toSameAxisOf: currentAlbum)
+        //previousButton.autoAlignAxis(.horizontal, toSameAxisOf: currentAlbum)
+        previousButton.autoPinEdge(.top, to: .bottom, of: previousAlbum, withOffset: 30)
         previousButton.autoPinEdge(toSuperviewSafeArea: .leading, withInset: padding / 4 - 15)
         previousButton.autoSetDimension(.height, toSize: 48)
         previousButton.autoSetDimension(.width, toSize: 48)
@@ -149,26 +157,44 @@ class AlbumPickerViewController: UIViewController {
     }
     
     private func bindData() {
-        viewModel.$albums.sink{ [weak self] albums in
-            var albumsData = albums
-            albumsData.append(AlbumModel(code: "", name: "", numberOfStickers: 1))
-            self?.albums = albumsData
-            DispatchQueue.main.async {
+//        viewModel.$albums.sink{ [weak self] albums in
+//            var albumsData = albums
+//            albumsData.append(AlbumModel(code: "", name: "", numberOfStickers: 1))
+//            self?.albums = albumsData
+//            DispatchQueue.main.async {
+//                self?.updateAlbumPreviews()
+//            }
+//        }.store(in: &disposables)
+        viewModel.$albums
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] albums in
+                var albumsData = albums
+                albumsData.append(AlbumModel(code: "", name: "", numberOfStickers: 1))
+                self?.albums = albumsData
                 self?.updateAlbumPreviews()
             }
-        }.store(in: &disposables)
+            .store(in: &disposables)
     }
     
     private func updateAlbumPreviews() {
+        // very bad solution figure something else out
+        currentAlbum.codeInputView.isHidden = true
+        currentAlbum.codeOutputVIew.isHidden = true
+        
         guard !albums.isEmpty else { return }
         let previous = albumIndex > 0 ? albums[albumIndex - 1] : nil
         previousAlbum.updateData(albumData: previous, colorID: 1)
         let current = albums[albumIndex]
         if (current.code != "") {
             currentAlbum.updateData(albumData: current, colorID: 0)
+            albumStatsView.isHidden = false
+            nextButton.isHidden = false
         } else {
             currentAlbum.updateData(albumData: current, colorID: 2)
+            albumStatsView.isHidden = true
+            nextButton.isHidden = true
         }
+        previousButton.isHidden = albumIndex == 0 ? true : false
         albumStatsView.setAlbumData(albumData: current)
         let next = albumIndex < albums.count - 1 ? albums[albumIndex + 1] : nil
         nextAlbum.updateData(albumData: next, colorID: 1)

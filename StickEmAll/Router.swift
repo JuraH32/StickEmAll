@@ -24,7 +24,6 @@ class Router: AppRouterProtocol{
         //let exchangeViewModel = ExchangeViewModel(dataSource: albumDataSource, exchangeCode: "")
         //let exchangeViewController = ExchangeViewController(viewModel: exchangeViewModel, router: self, exchangeCode: "")
         
-        
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
