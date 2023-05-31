@@ -8,14 +8,15 @@ class ExchangeViewModel: ObservableObject {
     
     init(dataSource: AlbumDataSource, exchangeCode: String, album: AlbumModel) {
         self.dataSource = dataSource
-        getExchange(exchangeCode: exchangeCode, album: album)
+        getExchange(exchangeCode: exchangeCode)
     }
     
-    func getExchange(exchangeCode: String, album: AlbumModel) {
+    func getExchange(exchangeCode: String) {
         //Testing exchange code for album with code 3856021222580
         //exchangeCode = "381ccc674b4ecc00c3c00001110100000000E000000000000C000000300000000010000000000000E000000000400000000000000000003”
         let exchangeAlbum = AlbumModel(exchangeCode: exchangeCode)
-        guard exchangeAlbum.code == album.code else { return }
+        let albums = dataSource.albums
+        guard let album = albums.first(where: {$0.code == exchangeAlbum.code}) else { return }
         var exchangeStickers: [Sticker] = []
         for i in 0...album.stickers.count {
             let stickerAlbum = album.stickers[i].numberCollected
