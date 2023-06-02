@@ -14,6 +14,8 @@ class AlbumPickerViewController: UIViewController {
     private var previousButton: UIButton!
     private var albumStatsView: AlbumStatsView!
     
+    private var scanCodeBtn: UIButton!
+    
     private var disposables = Set<AnyCancellable>()
     private var albums: [AlbumModel]!
     
@@ -93,6 +95,10 @@ class AlbumPickerViewController: UIViewController {
         touchGesture.numberOfTapsRequired = 1
         touchGesture.numberOfTouchesRequired = 1
         currentAlbum.addGestureRecognizer(touchGesture)
+        
+        scanCodeBtn = UIButton()
+        view.addSubview(scanCodeBtn)
+        scanCodeBtn.addTarget(self, action: #selector(handleScan), for: .touchUpInside)
     }
     
     private func styleViews() {
@@ -113,6 +119,11 @@ class AlbumPickerViewController: UIViewController {
         previousButton.contentVerticalAlignment = .fill
         previousButton.contentHorizontalAlignment = .fill
         previousButton.tintColor = .black.withAlphaComponent(0.9)
+        
+        scanCodeBtn.layer.cornerRadius = 32
+        scanCodeBtn.backgroundColor = .lightRed
+        scanCodeBtn.setImage(UIImage(systemName: "qrcode.viewfinder", withConfiguration: UIImage.SymbolConfiguration(pointSize: 36, weight: .bold)), for: .normal)
+        scanCodeBtn.tintColor = .white
     }
     
     private func defineLayoutForViews() {
@@ -120,6 +131,12 @@ class AlbumPickerViewController: UIViewController {
         viewTitleLabel.autoPinEdge(toSuperviewSafeArea: .leading, withInset: padding)
         viewTitleLabel.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: padding)
         viewTitleLabel.autoSetDimension(.height, toSize: 35)
+        
+        scanCodeBtn.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 20)
+        scanCodeBtn.autoSetDimension(.width, toSize: 64)
+        scanCodeBtn.autoMatch(.height, to: .width, of: scanCodeBtn)
+        scanCodeBtn.autoAlignAxis(.horizontal, toSameAxisOf: viewTitleLabel)
+        view.bringSubviewToFront(scanCodeBtn)
         
         currentAlbum.autoPinEdge(toSuperviewSafeArea: .leading, withInset: padding)
         currentAlbum.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: padding)
@@ -178,8 +195,7 @@ class AlbumPickerViewController: UIViewController {
     
     private func updateAlbumPreviews() {
         // very bad solution figure something else out
-        currentAlbum.codeInputView.isHidden = true
-        currentAlbum.codeOutputVIew.isHidden = true
+        currentAlbum.codeView.isHidden = true
         
         guard !albums.isEmpty else { return }
         let previous = albumIndex > 0 ? albums[albumIndex - 1] : nil
@@ -270,5 +286,9 @@ class AlbumPickerViewController: UIViewController {
                 router.openAlbumDetails(code: albums[albumIndex].code)
             }
         }
+    }
+    
+    @objc func handleScan() {
+        router.changeToScanScreen()
     }
 }

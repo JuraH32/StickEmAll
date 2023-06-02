@@ -7,10 +7,8 @@ class AlbumPreviewView: UIView {
     var albumData: AlbumModel?
     private var colorID: Int = 0
     
-    private var exchangeInBtn: UIButton!
-    private var exchangeOutBtn: UIButton!
-    var codeInputView: CodeInputView!
-    var codeOutputVIew: CodeOutputView!
+    private var generateCodeBtn: UIButton!
+    var codeView: CodeOutputView!
     
     init() {
         super.init(frame: .zero)
@@ -42,19 +40,12 @@ class AlbumPreviewView: UIView {
         addView = UIImageView()
         addSubview(addView)
         
-        exchangeInBtn = UIButton()
-        addSubview(exchangeInBtn)
-        exchangeInBtn.addTarget(self, action: #selector(handleInBtn), for: .touchUpInside)
+        generateCodeBtn = UIButton()
+        addSubview(generateCodeBtn)
+        generateCodeBtn.addTarget(self, action: #selector(handleOutBtn), for: .touchUpInside)
         
-        exchangeOutBtn = UIButton()
-        addSubview(exchangeOutBtn)
-        exchangeOutBtn.addTarget(self, action: #selector(handleOutBtn), for: .touchUpInside)
-        
-        codeInputView = CodeInputView()
-        addSubview(codeInputView)
-        
-        codeOutputVIew = CodeOutputView()
-        addSubview(codeOutputVIew)
+        codeView = CodeOutputView()
+        addSubview(codeView)
     }
     
     private func styleViews() {
@@ -70,41 +61,31 @@ class AlbumPreviewView: UIView {
         addView.layer.cornerRadius = 50
         addView.alpha = 0
         
-        exchangeInBtn.backgroundColor = .lightRed
-        exchangeInBtn.setTitle("In", for: .normal)
-        exchangeInBtn.layer.cornerRadius = 10
+        generateCodeBtn.layer.cornerRadius = 32
+        generateCodeBtn.backgroundColor = .lightRed
+        generateCodeBtn.setImage(UIImage(systemName: "qrcode", withConfiguration: UIImage.SymbolConfiguration(pointSize: 36, weight: .bold)), for: .normal)
+        generateCodeBtn.tintColor = .white
         
-        exchangeOutBtn.backgroundColor = .lightRed
-        exchangeOutBtn.setTitle("Out", for: .normal)
-        exchangeOutBtn.layer.cornerRadius = 10
+        codeView.isHidden = true
         
-        codeInputView.isHidden = true
-        codeOutputVIew.isHidden = true
+        layer.cornerRadius = 10
     }
     
     private func defineLayoutForViews() {
         title.autoPinEdgesToSuperviewEdges()
         
-        exchangeInBtn.autoPinEdge(toSuperviewEdge: .bottom, withInset: 30)
-        exchangeInBtn.autoPinEdge(toSuperviewEdge: .leading, withInset: 30)
-        exchangeInBtn.autoSetDimensions(to: CGSize(width: 50, height: 50))
-        self.bringSubviewToFront(exchangeInBtn)
-        
-        exchangeOutBtn.autoPinEdge(toSuperviewEdge: .bottom, withInset: 30)
-        exchangeOutBtn.autoPinEdge(toSuperviewEdge: .trailing, withInset: 30)
-        exchangeOutBtn.autoSetDimensions(to: CGSize(width: 50, height: 50))
-        self.bringSubviewToFront(exchangeOutBtn)
+        generateCodeBtn.autoPinEdge(toSuperviewEdge: .bottom, withInset: 30)
+        generateCodeBtn.autoAlignAxis(toSuperviewAxis: .vertical)
+        generateCodeBtn.autoSetDimensions(to: CGSize(width: 64, height: 64))
+        self.bringSubviewToFront(generateCodeBtn)
         
         addView.autoAlignAxis(toSuperviewAxis: .vertical)
         addView.autoAlignAxis(toSuperviewAxis: .horizontal)
         addView.autoSetDimension(.width, toSize: 100)
         addView.autoMatch(.height, to: .width, of: addView)
         
-        codeInputView.autoPinEdgesToSuperviewEdges()
-        bringSubviewToFront(codeInputView)
-        
-        codeOutputVIew.autoPinEdgesToSuperviewEdges()
-        bringSubviewToFront(codeOutputVIew)
+        codeView.autoPinEdgesToSuperviewEdges()
+        bringSubviewToFront(codeView)
     }
     
     private func styleData() {
@@ -123,15 +104,10 @@ class AlbumPreviewView: UIView {
         } else {
             self.layer.borderWidth = 0
         }
-        exchangeInBtn.isHidden = colorID == 0 ? false : true
-        exchangeOutBtn.isHidden = colorID == 0 ? false : true
-    }
-    
-    @objc private func handleInBtn() {
-        codeInputView.isHidden = false
+        generateCodeBtn.isHidden = colorID == 0 ? false : true
     }
     
     @objc private func handleOutBtn() {
-        codeOutputVIew.isHidden = false
+        codeView.isHidden = false
     }
 }

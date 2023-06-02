@@ -81,7 +81,7 @@ struct AlbumModel: Codable {
         let codeHex = exchangeCode.prefix(11)
         let decimalCode = Int64(codeHex, radix: 16)
         var code = ""
-        let codeString = String(describing: decimalCode)
+        let codeString = String(describing: decimalCode!)
         if 11 - codeString.count > 0 {
             for _ in 1...(11 - codeString.count) {
                 code += "0"

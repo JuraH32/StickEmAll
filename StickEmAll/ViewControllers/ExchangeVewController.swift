@@ -8,7 +8,6 @@ class ExchangeViewController: UIViewController {
     
     private let viewModel: ExchangeViewModel
     private let router: Router
-    private let exchangeCode: String
     private var exchangeData: Exchange?
     private var disposable = Set<AnyCancellable>()
     
@@ -21,10 +20,9 @@ class ExchangeViewController: UIViewController {
     private var exchangeLabel: UILabel!
     private var exchangeImageView: UIImageView!
     
-    init (viewModel: ExchangeViewModel, router: Router, exchangeCode: String) {
+    init (viewModel: ExchangeViewModel, router: Router) {
         self.router = router
         self.viewModel = viewModel
-        self.exchangeCode = exchangeCode
         
         super.init(nibName: nil, bundle: nil)
     }
