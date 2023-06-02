@@ -25,16 +25,22 @@ class ExchangeViewModel: ObservableObject {
             if (stickerExchange == -1 || (stickerAlbum > 0 && stickerExchange > 0) || (stickerAlbum < 2 && stickerExchange < 2)) {
                 continue
             }
-            if (stickerAlbum == 2) {
+            if (stickerAlbum >= 2) {
                 exchangeStickers.append(Sticker(number: i+1, numberCollected: -1))
             } else {
                 exchangeStickers.append(Sticker(number: i+1, numberCollected: 1))
             }
         }
+//        print(album)
+//        print(exchangeAlbum)
+        
         let code = album.code
         let name = album.name
         let recieve = exchangeStickers.filter {$0.numberCollected > 0}.map {$0.number}
         let give = exchangeStickers.filter {$0.numberCollected < 0}.map {$0.number}
+        
+//        print("Recieve: ", recieve)
+//        print("Give: ", give)
         exchange = Exchange(code: code, name: name, recieve: recieve, give: give)
     }
 }

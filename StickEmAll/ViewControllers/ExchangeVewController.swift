@@ -9,12 +9,14 @@ class ExchangeViewController: UIViewController {
     private let viewModel: ExchangeViewModel
     private let router: Router
     private var exchangeData: Exchange?
+    private var recieveList: [Int] = []
+    private var giveList: [Int] = []
     private var disposable = Set<AnyCancellable>()
     
     private var albumNameLabel: UILabel!
     private var contentContainer: UIView!
-    var recieveCollectionView: UICollectionView!
-    var giveCollectionView: UICollectionView!
+    var recieveCollectionView: ExchangeCollectionView!
+    var giveCollectionView: ExchangeCollectionView!
     private var exchangeButton: UIButton!
     private var exchangeView: UIView!
     private var exchangeLabel: UILabel!
@@ -58,23 +60,29 @@ class ExchangeViewController: UIViewController {
         exchangeImageView = UIImageView()
         exchangeView.addSubview(exchangeImageView)
         
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-        flowLayout.minimumInteritemSpacing = 10 // ?
-        flowLayout.itemSize = CGSize(width: 100, height: 80)
+        giveCollectionView = ExchangeCollectionView(listOfStickers: giveList, direction: -1)
+        contentContainer.addSubview(giveCollectionView)
         
-        recieveCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        recieveCollectionView.dataSource = self
-        recieveCollectionView.delegate = self
-        recieveCollectionView.register(ExchangeStickerCell.self, forCellWithReuseIdentifier: ExchangeStickerCell.reuseIdentifier)
+        recieveCollectionView = ExchangeCollectionView(listOfStickers: recieveList, direction: 1)
         contentContainer.addSubview(recieveCollectionView)
         
-        giveCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        giveCollectionView.dataSource = self
-        giveCollectionView.delegate = self
-        giveCollectionView.register(ExchangeStickerCell.self, forCellWithReuseIdentifier: ExchangeStickerCell.reuseIdentifier)
-        contentContainer.addSubview(giveCollectionView)
+//        let flowLayout = UICollectionViewFlowLayout()
+//        flowLayout.scrollDirection = .vertical
+//        flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+//        flowLayout.minimumInteritemSpacing = 10 // ?
+//        flowLayout.itemSize = CGSize(width: 100, height: 80)
+//
+//        recieveCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+//        recieveCollectionView.dataSource = self
+//        recieveCollectionView.delegate = self
+//        recieveCollectionView.register(ExchangeStickerCell.self, forCellWithReuseIdentifier: ExchangeStickerCell.reuseIdentifier)
+//        contentContainer.addSubview(recieveCollectionView)
+//
+//        giveCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+//        giveCollectionView.dataSource = self
+//        giveCollectionView.delegate = self
+//        giveCollectionView.register(ExchangeStickerCell.self, forCellWithReuseIdentifier: ExchangeStickerCell.reuseIdentifier)
+//        contentContainer.addSubview(giveCollectionView)
         
     }
     
@@ -143,8 +151,12 @@ class ExchangeViewController: UIViewController {
     private func bindData() {
         viewModel.$exchange.sink{ [weak self] exchange in
             self?.exchangeData = exchange
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [self] in
                 self?.albumNameLabel.text = self?.exchangeData?.name
+                self?.recieveList = self?.exchangeData?.recieve ?? []
+                self?.recieveCollectionView.setStickersList(listOfStickers: self!.recieveList)
+                self?.giveList = self?.exchangeData?.give ?? []
+                self?.giveCollectionView.setStickersList(listOfStickers: self!.giveList)
             }
         }.store(in: &disposable)
     }
@@ -155,29 +167,31 @@ class ExchangeViewController: UIViewController {
     }
 }
 
-extension ExchangeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == recieveCollectionView {
-            return exchangeData != nil ? exchangeData!.recieve.count : 0
-        } else if collectionView == giveCollectionView {
-            return exchangeData != nil ? exchangeData!.give.count : 0
-        }
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExchangeStickerCell.reuseIdentifier, for: indexPath) as? ExchangeStickerCell else { fatalError() }
-        var number = 0
-        var direction = 0
-        if collectionView == recieveCollectionView {
-            number = exchangeData != nil ? exchangeData!.recieve[indexPath.item] : 0
-            direction = 1
-        } else if collectionView == giveCollectionView{
-            number = exchangeData != nil ? exchangeData!.give[indexPath.item] : 0
-            direction = -1
-        }
-        cell.setData(number: number, direcionOfExchange: direction)
-        return cell
-    }
-}
+//extension ExchangeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        if collectionView == recieveCollectionView {
+//            print("Recieve: ", exchangeData!.recieve.count)
+//            return exchangeData != nil ? exchangeData!.recieve.count : 0
+//        } else if collectionView == giveCollectionView {
+//            print("Give: ", exchangeData!.give.count)
+//            return exchangeData != nil ? exchangeData!.give.count : 0
+//        }
+//        return 0
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExchangeStickerCell.reuseIdentifier, for: indexPath) as? ExchangeStickerCell else { fatalError() }
+//        var number = 0
+//        var direction = 0
+//        if collectionView == recieveCollectionView {
+//            number = exchangeData != nil ? exchangeData!.recieve[indexPath.item] : 0
+//            direction = 1
+//        } else if collectionView == giveCollectionView{
+//            number = exchangeData != nil ? exchangeData!.give[indexPath.item] : 0
+//            direction = -1
+//        }
+//        cell.setData(number: number, direcionOfExchange: direction)
+//        return cell
+//    }
+//}
 
