@@ -86,7 +86,7 @@ class CreateAlbumViewController: UIViewController {
         let code = formView.inputFieldCode.inputField.text!
         let name = formView.inputFieldName.inputField.text!
         let numberOfStickers = Int(formView.inputFieldStickerNumber.inputField.text!) ?? 0
-        let numberOfStickerPerPack = Int(formView.inputFieldStickerNumber.inputField.text!) ?? 0
+        let numberOfStickerPerPack = Int(formView.inputFieldPacketCount.inputField.text!) ?? 0
         viewModel.createAlbum(code: code, name: name, numberOfSticker: numberOfStickers, numberOfStickerPerPack: numberOfStickerPerPack)
         router.addedAlbum()
     }

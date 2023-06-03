@@ -11,6 +11,14 @@ struct AlbumModel: Codable {
         return stickers.filter {$0.numberCollected > 0}.count
     }
     
+    var totalStickerCount: Int {
+        return stickers.reduce(0, {$0 + $1.numberCollected})
+    }
+    
+    var percentageCollected: Int {
+        return Int(Double(numberOfCollectedStickers)/Double(numberOfStickers)*100)
+    }
+    
     var expectedNumberOfPacks: Float? {
         guard let stickersPerPack = stickersPerPack else { return nil }
         //TODO: Add formula

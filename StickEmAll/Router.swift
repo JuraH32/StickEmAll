@@ -21,8 +21,6 @@ class Router: AppRouterProtocol{
         navigationController?.pushViewController(logoViewController, animated: true)
         navigationController?.navigationBar.tintColor = .black
         
-        //let scanExchangeViewController = ScanExchangeViewController(router: self)
-        
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
