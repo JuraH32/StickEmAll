@@ -1,4 +1,5 @@
 import PureLayout
+import CoreImage
 
 extension UIView {
     func addCornerRadiusToTopCorners(radius: CGFloat) {
@@ -58,4 +59,32 @@ extension String {
         let end = index(start, offsetBy: range.upperBound - range.lowerBound)
         return String(self[start ..< end])
     }
+}
+
+extension UIImageView {
+    func setImageWithoutCache(image: UIImage?) {
+            let uniqueIdentifier = UUID().uuidString
+            self.image = nil
+            DispatchQueue.main.async {
+                self.image = image
+                self.accessibilityIdentifier = uniqueIdentifier
+            }
+        }
+}
+
+
+func generateQRCode(from string: String, width: CGFloat, height: CGFloat) -> UIImage? {
+    let data = string.data(using: .isoLatin1)
+    if let filter = CIFilter(name: "CIQRCodeGenerator") {
+        filter.setValue(data, forKey: "inputMessage")
+        guard let qrCodeImage = filter.outputImage else { return nil }
+
+        let scaleX = width / qrCodeImage.extent.size.width
+        let scaleY = height / qrCodeImage.extent.size.height
+        let transformedImage = qrCodeImage.transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
+        
+        return UIImage(ciImage: transformedImage)
+    }
+    
+    return nil
 }

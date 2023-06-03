@@ -171,6 +171,8 @@ class AlbumPickerViewController: UIViewController {
             bottomViewTopConstraint,
         ])
         statsViewMaxHeight = view.frame.height * 0.7
+        
+        currentAlbum.codeView.isHidden = true
     }
     
     private func bindData() {
@@ -196,7 +198,6 @@ class AlbumPickerViewController: UIViewController {
     private func updateAlbumPreviews() {
         // very bad solution figure something else out
         currentAlbum.codeView.isHidden = true
-        
         guard !albums.isEmpty else { return }
         let previous = albumIndex > 0 ? albums[albumIndex - 1] : nil
         previousAlbum.updateData(albumData: previous, colorID: 1)
@@ -205,6 +206,8 @@ class AlbumPickerViewController: UIViewController {
             currentAlbum.updateData(albumData: current, colorID: 0)
             albumStatsView.isHidden = false
             nextButton.isHidden = false
+//            currentAlbum.codeView.bindData(code: current.exchangeCode)
+            currentAlbum.codeView.loadCode(code: currentAlbum.albumData?.exchangeCode ?? "")
         } else {
             currentAlbum.updateData(albumData: current, colorID: 2)
             albumStatsView.isHidden = true
