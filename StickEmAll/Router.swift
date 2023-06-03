@@ -21,9 +21,6 @@ class Router: AppRouterProtocol{
         navigationController?.pushViewController(logoViewController, animated: true)
         navigationController?.navigationBar.tintColor = .black
         
-        //let exchangeViewModel = ExchangeViewModel(dataSource: albumDataSource, exchangeCode: "")
-        //let exchangeViewController = ExchangeViewController(viewModel: exchangeViewModel, router: self, exchangeCode: "")
-        
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
@@ -50,7 +47,20 @@ class Router: AppRouterProtocol{
         navigationController?.popViewController(animated: true)
     }
     
-    func handleExchange() {
-        // TODO
+    func scannedCode(code: String) {
+        let exchangeViewModel = ExchangeViewModel(dataSource: albumDataSource, exchangeCode: code)
+        let exchangeViewController = ExchangeViewController(viewModel: exchangeViewModel, router: self)
+        navigationController?.popViewController(animated: false)
+        navigationController?.pushViewController(exchangeViewController, animated: true)
+    }
+    
+    func changeToScanScreen() {
+        let scanExchangeViewController = ScanExchangeViewController(router: self)
+        navigationController?.pushViewController(scanExchangeViewController, animated: true)
+    }
+    
+    func handleExchange(code: String) {
+        navigationController?.popViewController(animated: true)
+        openAlbumDetails(code: code)
     }
 }

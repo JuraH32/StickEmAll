@@ -11,6 +11,14 @@ struct AlbumModel: Codable {
         return stickers.filter {$0.numberCollected > 0}.count
     }
     
+    var totalStickerCount: Int {
+        return stickers.reduce(0, {$0 + $1.numberCollected})
+    }
+    
+    var percentageCollected: Int {
+        return Int(Double(numberOfCollectedStickers)/Double(numberOfStickers)*100)
+    }
+    
     var expectedNumberOfPacks: Float? {
         guard let stickersPerPack = stickersPerPack else { return nil }
         //TODO: Add formula
@@ -81,7 +89,7 @@ struct AlbumModel: Codable {
         let codeHex = exchangeCode.prefix(11)
         let decimalCode = Int64(codeHex, radix: 16)
         var code = ""
-        let codeString = String(describing: decimalCode)
+        let codeString = String(describing: decimalCode!)
         if 11 - codeString.count > 0 {
             for _ in 1...(11 - codeString.count) {
                 code += "0"

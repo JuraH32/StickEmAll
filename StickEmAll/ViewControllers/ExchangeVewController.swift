@@ -8,23 +8,22 @@ class ExchangeViewController: UIViewController {
     
     private let viewModel: ExchangeViewModel
     private let router: Router
-    private let exchangeCode: String
     private var exchangeData: Exchange?
+    private var recieveList: [Int] = []
+    private var giveList: [Int] = []
     private var disposable = Set<AnyCancellable>()
     
     private var albumNameLabel: UILabel!
     private var contentContainer: UIView!
-    var recieveCollectionView: UICollectionView!
-    var giveCollectionView: UICollectionView!
-    private var exchangeButton: UIButton!
+    var recieveCollectionView: ExchangeCollectionView!
+    var giveCollectionView: ExchangeCollectionView!
     private var exchangeView: UIView!
     private var exchangeLabel: UILabel!
     private var exchangeImageView: UIImageView!
     
-    init (viewModel: ExchangeViewModel, router: Router, exchangeCode: String) {
+    init (viewModel: ExchangeViewModel, router: Router) {
         self.router = router
         self.viewModel = viewModel
-        self.exchangeCode = exchangeCode
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -47,12 +46,13 @@ class ExchangeViewController: UIViewController {
         contentContainer = UIView()
         view.addSubview(contentContainer)
         
-        exchangeButton = UIButton()
-        contentContainer.addSubview(exchangeButton)
-        exchangeButton.addTarget(self, action: #selector(handleExchange), for: .touchUpInside)
-        
         exchangeView = UIView()
-        exchangeButton.addSubview(exchangeView)
+        contentContainer.addSubview(exchangeView)
+        
+        let touchGesture = UITapGestureRecognizer(target: self, action: #selector(handleExchange(_:)))
+        touchGesture.numberOfTapsRequired = 1
+        touchGesture.numberOfTouchesRequired = 1
+        exchangeView.addGestureRecognizer(touchGesture)
         
         exchangeLabel = UILabel()
         exchangeView.addSubview(exchangeLabel)
@@ -60,23 +60,11 @@ class ExchangeViewController: UIViewController {
         exchangeImageView = UIImageView()
         exchangeView.addSubview(exchangeImageView)
         
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-        flowLayout.minimumInteritemSpacing = 10 // ?
-        flowLayout.itemSize = CGSize(width: 100, height: 80)
-        
-        recieveCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        recieveCollectionView.dataSource = self
-        recieveCollectionView.delegate = self
-        recieveCollectionView.register(ExchangeStickerCell.self, forCellWithReuseIdentifier: ExchangeStickerCell.reuseIdentifier)
-        contentContainer.addSubview(recieveCollectionView)
-        
-        giveCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        giveCollectionView.dataSource = self
-        giveCollectionView.delegate = self
-        giveCollectionView.register(ExchangeStickerCell.self, forCellWithReuseIdentifier: ExchangeStickerCell.reuseIdentifier)
+        giveCollectionView = ExchangeCollectionView(listOfStickers: giveList, direction: -1)
         contentContainer.addSubview(giveCollectionView)
+        
+        recieveCollectionView = ExchangeCollectionView(listOfStickers: recieveList, direction: 1)
+        contentContainer.addSubview(recieveCollectionView)
         
     }
     
@@ -91,8 +79,8 @@ class ExchangeViewController: UIViewController {
         albumNameLabel.numberOfLines = 0
         albumNameLabel.lineBreakMode = .byWordWrapping
         
-        exchangeButton.backgroundColor = .blurple.withAlphaComponent(0.8)
-        exchangeButton.layer.cornerRadius = 15
+        exchangeView.backgroundColor = .blurple.withAlphaComponent(0.8)
+        exchangeView.layer.cornerRadius = 15
         
         exchangeLabel.text = "Exchange"
         exchangeLabel.font = .boldSystemFont(ofSize: 24)
@@ -111,22 +99,17 @@ class ExchangeViewController: UIViewController {
         albumNameLabel.autoPinEdge(toSuperviewSafeArea: .trailing)
         albumNameLabel.autoSetDimension(.height, toSize: 100)
         
-        exchangeButton.autoCenterInSuperview()
-        exchangeButton.autoSetDimension(.height, toSize: 50)
-        exchangeButton.autoMatch(.width, to: .width, of: exchangeView, withOffset: 30)
-        
         exchangeView.autoCenterInSuperview()
-        exchangeView.autoPinEdge(toSuperviewEdge: .top)
-        exchangeView.autoPinEdge(toSuperviewEdge: .bottom)
+        exchangeView.autoSetDimension(.height, toSize: 50)
         
         exchangeLabel.autoPinEdge(toSuperviewEdge: .top)
         exchangeLabel.autoPinEdge(toSuperviewEdge: .bottom)
-        exchangeLabel.autoPinEdge(toSuperviewEdge: .trailing)
+        exchangeLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: 20)
         exchangeLabel.autoPinEdge(.leading, to: .trailing, of: exchangeImageView, withOffset: 20)
         
         exchangeImageView.autoPinEdge(toSuperviewEdge: .top)
         exchangeImageView.autoPinEdge(toSuperviewEdge: .bottom)
-        exchangeImageView.autoPinEdge(toSuperviewEdge: .leading)
+        exchangeImageView.autoPinEdge(toSuperviewEdge: .leading, withInset: 20)
         
         contentContainer.autoPinEdge(.top, to: .bottom, of: albumNameLabel)
         contentContainer.autoPinEdge(toSuperviewSafeArea: .bottom)
@@ -134,9 +117,9 @@ class ExchangeViewController: UIViewController {
         contentContainer.autoPinEdge(toSuperviewSafeArea: .trailing)
         
         giveCollectionView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom)
-        giveCollectionView.autoPinEdge(.bottom, to: .top, of: exchangeButton)
+        giveCollectionView.autoPinEdge(.bottom, to: .top, of: exchangeView)
         
-        recieveCollectionView.autoPinEdge(.top, to: .bottom, of: exchangeButton)
+        recieveCollectionView.autoPinEdge(.top, to: .bottom, of: exchangeView)
         recieveCollectionView.autoPinEdge(toSuperviewEdge: .leading)
         recieveCollectionView.autoPinEdge(toSuperviewEdge: .trailing)
         recieveCollectionView.autoPinEdge(toSuperviewEdge: .bottom)
@@ -145,41 +128,20 @@ class ExchangeViewController: UIViewController {
     private func bindData() {
         viewModel.$exchange.sink{ [weak self] exchange in
             self?.exchangeData = exchange
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [self] in
                 self?.albumNameLabel.text = self?.exchangeData?.name
+                self?.recieveList = self?.exchangeData?.recieve ?? []
+                self?.recieveCollectionView.setStickersList(listOfStickers: self!.recieveList)
+                self?.giveList = self?.exchangeData?.give ?? []
+                self?.giveCollectionView.setStickersList(listOfStickers: self!.giveList)
             }
         }.store(in: &disposable)
     }
     
-    @objc func handleExchange() {
-        // TODO
-        router.handleExchange()
+    @objc func handleExchange(_ gestureRecognizer: UITapGestureRecognizer) {
+        if gestureRecognizer.state == .ended {
+            viewModel.updateStickers()
+            router.handleExchange(code: exchangeData?.code ?? "")
+        }
     }
 }
-
-extension ExchangeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == recieveCollectionView {
-            return exchangeData != nil ? exchangeData!.recieve.count : 0
-        } else if collectionView == giveCollectionView {
-            return exchangeData != nil ? exchangeData!.give.count : 0
-        }
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExchangeStickerCell.reuseIdentifier, for: indexPath) as? ExchangeStickerCell else { fatalError() }
-        var number = 0
-        var direction = 0
-        if collectionView == recieveCollectionView {
-            number = exchangeData != nil ? exchangeData!.recieve[indexPath.item] : 0
-            direction = 1
-        } else if collectionView == giveCollectionView{
-            number = exchangeData != nil ? exchangeData!.give[indexPath.item] : 0
-            direction = -1
-        }
-        cell.setData(number: number, direcionOfExchange: direction)
-        return cell
-    }
-}
-

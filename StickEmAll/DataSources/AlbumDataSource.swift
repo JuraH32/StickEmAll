@@ -93,4 +93,22 @@ class AlbumDataSource {
             return nil
         }
     }
+    
+    func exchangeStickers(forExchange exchange: Exchange) {
+        guard let index = albums.firstIndex(where: {$0.code == exchange.code}) else {
+            print("Error saving exchange data")
+            return
+        }
+        if exchange.give.count != 0 {
+            for i in 0...exchange.give.count-1 {
+                albums[index].stickers[exchange.give[i]-1].numberCollected -= 1
+            }
+        }
+        if exchange.recieve.count != 0 {
+            for i in 0...exchange.recieve.count-1 {
+                albums[index].stickers[exchange.recieve[i]-1].numberCollected += 1
+            }
+        }
+        saveAlbums()
+    }
 }
