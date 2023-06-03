@@ -17,7 +17,7 @@ class ExchangeViewModel: ObservableObject {
         let exchangeAlbum = AlbumModel(exchangeCode: exchangeCode)
         let albums = dataSource.albums
         
-        guard let album = albums.first(where: {exchangeAlbum.code == $0.code}) else { return } // old: $0.code == exchangeAlbum.code
+        guard let album = albums.first(where: {exchangeAlbum.code == $0.code}) else { return }
         var exchangeStickers: [Sticker] = []
         for i in 0...album.stickers.count-1 {
             let stickerAlbum = album.stickers[i].numberCollected
@@ -42,5 +42,9 @@ class ExchangeViewModel: ObservableObject {
 //        print("Recieve: ", recieve)
 //        print("Give: ", give)
         exchange = Exchange(code: code, name: name, recieve: recieve, give: give)
+    }
+    
+    func updateStickers() {
+        dataSource.exchangeStickers(forExchange: exchange!) // handle optional better
     }
 }

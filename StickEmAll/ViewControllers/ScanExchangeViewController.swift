@@ -86,8 +86,8 @@ class ScanExchangeViewController: UIViewController {
     }
     
     @objc func onClick() {
-        //let code = String(codeField.text!)
-        let code = "381ccc674b4ecc00c3c00001110100000000E000000000000C000000300000000010000000000000E000000000400000000000000000003"
+        let code = String(codeField.text!)
+        //let code = "381ccc674b4ecc00c3c00001110100000000E000000000000C000000300000000010000000000000E000000000400000000000000000003"
         router.scannedCode(code: code)
     }
 }

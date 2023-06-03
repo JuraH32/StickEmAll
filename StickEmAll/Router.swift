@@ -61,7 +61,8 @@ class Router: AppRouterProtocol{
         navigationController?.pushViewController(scanExchangeViewController, animated: true)
     }
     
-    func handleExchange() {
-        // TODO
+    func handleExchange(code: String) {
+        navigationController?.popViewController(animated: true)
+        openAlbumDetails(code: code)
     }
 }
