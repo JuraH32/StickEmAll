@@ -1,4 +1,5 @@
 import PureLayout
+import CoreImage
 
 extension UIView {
     func addCornerRadiusToTopCorners(radius: CGFloat) {
@@ -58,4 +59,33 @@ extension String {
         let end = index(start, offsetBy: range.upperBound - range.lowerBound)
         return String(self[start ..< end])
     }
+}
+
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
+
+
+func generateQRCode(from string: String, width: CGFloat, height: CGFloat) -> UIImage? {
+    let data = string.data(using: .isoLatin1)
+    if let filter = CIFilter(name: "CIQRCodeGenerator") {
+        filter.setValue(data, forKey: "inputMessage")
+        guard let qrCodeImage = filter.outputImage else { return nil }
+
+        let scaleX = width / qrCodeImage.extent.size.width
+        let scaleY = height / qrCodeImage.extent.size.height
+        let transformedImage = qrCodeImage.transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
+        
+        return UIImage(ciImage: transformedImage)
+    }
+    
+    return nil
 }

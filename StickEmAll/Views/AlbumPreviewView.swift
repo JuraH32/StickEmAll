@@ -49,6 +49,8 @@ class AlbumPreviewView: UIView {
     }
     
     private func styleViews() {
+        generateCodeBtn.isHidden = true
+        
         title.font = .boldSystemFont(ofSize: 22)
         title.textAlignment = .center
         title.numberOfLines = 0

@@ -22,7 +22,7 @@ class ExchangeCollectionView: UIView {
     
     private func buildViews() {
         createViews()
-        //styleViews()
+        styleViews()
         defineLayout()
     }
     
@@ -38,6 +38,10 @@ class ExchangeCollectionView: UIView {
         collectionView.delegate = self
         collectionView.register(ExchangeStickerCell.self, forCellWithReuseIdentifier: ExchangeStickerCell.reuseIdentifier)
         addSubview(collectionView)
+    }
+    
+    private func styleViews() {
+        collectionView.backgroundColor = .white
     }
     
     private func defineLayout() {

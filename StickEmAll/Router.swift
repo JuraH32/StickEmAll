@@ -48,6 +48,10 @@ class Router: AppRouterProtocol{
     }
     
     func scannedCode(code: String) {
+        if (code.trimmingCharacters(in: .whitespacesAndNewlines).count == 0) {
+            navigationController?.popViewController(animated: true)
+            return
+        }
         let exchangeViewModel = ExchangeViewModel(dataSource: albumDataSource, exchangeCode: code)
         let exchangeViewController = ExchangeViewController(viewModel: exchangeViewModel, router: self)
         navigationController?.popViewController(animated: false)

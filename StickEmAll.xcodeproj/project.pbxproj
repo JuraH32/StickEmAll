@@ -38,6 +38,8 @@
 		6EE65CF32A1BD690005447E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EE65CF12A1BD690005447E6 /* Main.storyboard */; };
 		6EE65CF52A1BD693005447E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EE65CF42A1BD693005447E6 /* Assets.xcassets */; };
 		6EE65CF82A1BD693005447E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EE65CF62A1BD693005447E6 /* LaunchScreen.storyboard */; };
+		6EEF25C52A2B9C6500DF2B7A /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EEF25C42A2B9C6400DF2B7A /* CoreImage.framework */; };
+		6EEF25C72A2B9D1800DF2B7A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EEF25C62A2B9D1800DF2B7A /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +75,8 @@
 		6EE65CF42A1BD693005447E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6EE65CF72A1BD693005447E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6EE65CF92A1BD693005447E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6EEF25C42A2B9C6400DF2B7A /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		6EEF25C62A2B9D1800DF2B7A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +85,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E46E3D02A1C927B0074ED12 /* PureLayout in Frameworks */,
+				6EEF25C52A2B9C6500DF2B7A /* CoreImage.framework in Frameworks */,
+				6EEF25C72A2B9D1800DF2B7A /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +155,7 @@
 			children = (
 				6EE65CEA2A1BD68F005447E6 /* StickEmAll */,
 				6EE65CE92A1BD68F005447E6 /* Products */,
+				6EEF25C32A2B9C6400DF2B7A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -179,6 +186,15 @@
 				6E1624FF2A1FFD5100AB2714 /* Router.swift */,
 			);
 			path = StickEmAll;
+			sourceTree = "<group>";
+		};
+		6EEF25C32A2B9C6400DF2B7A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6EEF25C62A2B9D1800DF2B7A /* AVFoundation.framework */,
+				6EEF25C42A2B9C6400DF2B7A /* CoreImage.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
