@@ -99,15 +99,10 @@ typealias SetCode = (String) -> Void
 
 extension AlbumBarcodeView: AVCaptureMetadataOutputObjectsDelegate {
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
-        // Check if any metadata objects are found
         if let metadataObject = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
            let stringValue = metadataObject.stringValue {
-            // Process the captured barcode value
-            print("Barcode value: \(stringValue)")
             stopBarcodeScanner()
             setCodeFunction(stringValue)
-            
-            
         }
     }
 }

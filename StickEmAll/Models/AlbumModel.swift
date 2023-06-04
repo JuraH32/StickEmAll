@@ -19,12 +19,6 @@ struct AlbumModel: Codable {
         return Int(Double(numberOfCollectedStickers)/Double(numberOfStickers)*100)
     }
     
-    var expectedNumberOfPacks: Float? {
-        guard let stickersPerPack = stickersPerPack else { return nil }
-        //TODO: Add formula
-        return 0
-    }
-    
     var exchangeCode: String {
         var exchangeString = ""
         guard let numCode = Int64(code) else { return ""}

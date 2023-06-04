@@ -127,7 +127,7 @@ class AlbumPickerViewController: UIViewController {
     }
     
     private func defineLayoutForViews() {
-        viewTitleLabel.autoPinEdge(toSuperviewSafeArea: .top)//, withInset: 20)
+        viewTitleLabel.autoPinEdge(toSuperviewSafeArea: .top)
         viewTitleLabel.autoPinEdge(toSuperviewSafeArea: .leading, withInset: padding)
         viewTitleLabel.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: padding)
         viewTitleLabel.autoSetDimension(.height, toSize: 35)
@@ -153,13 +153,11 @@ class AlbumPickerViewController: UIViewController {
         previousAlbum.autoMatch(.height, to: .height, of: currentAlbum, withMultiplier: 0.5)
         previousAlbum.autoMatch(.width, to: .width, of: currentAlbum, withMultiplier: 0.5)
         
-        //nextButton.autoAlignAxis(.horizontal, toSameAxisOf: currentAlbum, withOffset: 40)
         nextButton.autoPinEdge(.top, to: .bottom, of: nextAlbum, withOffset: 30)
         nextButton.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: padding / 4 - 15)
         nextButton.autoSetDimension(.height, toSize: 48)
         nextButton.autoSetDimension(.width, toSize: 48)
         
-        //previousButton.autoAlignAxis(.horizontal, toSameAxisOf: currentAlbum)
         previousButton.autoPinEdge(.top, to: .bottom, of: previousAlbum, withOffset: 30)
         previousButton.autoPinEdge(toSuperviewSafeArea: .leading, withInset: padding / 4 - 15)
         previousButton.autoSetDimension(.height, toSize: 48)
@@ -176,14 +174,6 @@ class AlbumPickerViewController: UIViewController {
     }
     
     private func bindData() {
-//        viewModel.$albums.sink{ [weak self] albums in
-//            var albumsData = albums
-//            albumsData.append(AlbumModel(code: "", name: "", numberOfStickers: 1))
-//            self?.albums = albumsData
-//            DispatchQueue.main.async {
-//                self?.updateAlbumPreviews()
-//            }
-//        }.store(in: &disposables)
         viewModel.$albums
             .receive(on: DispatchQueue.main)
             .sink { [weak self] albums in
@@ -196,8 +186,8 @@ class AlbumPickerViewController: UIViewController {
     }
     
     private func updateAlbumPreviews() {
-        // very bad solution figure something else out
         currentAlbum.codeView.isHidden = true
+        
         guard !albums.isEmpty else { return }
         let previous = albumIndex > 0 ? albums[albumIndex - 1] : nil
         previousAlbum.updateData(albumData: previous, colorID: 1)
@@ -206,7 +196,6 @@ class AlbumPickerViewController: UIViewController {
             currentAlbum.updateData(albumData: current, colorID: 0)
             albumStatsView.isHidden = false
             nextButton.isHidden = false
-//            currentAlbum.codeView.bindData(code: current.exchangeCode)
             currentAlbum.codeView.loadCode(code: currentAlbum.albumData?.exchangeCode ?? "")
         } else {
             currentAlbum.updateData(albumData: current, colorID: 2)
@@ -238,12 +227,10 @@ class AlbumPickerViewController: UIViewController {
 
         switch gestureRecognizer.state {
         case .changed:
-            // Update the vertical position of the bottom view based on the pan gesture translation
             let newY = -bottomViewTopConstraint.constant - translation.y
             bottomViewTopConstraint.constant = -min(statsViewMaxHeight, max(statsViewMinHeight, newY))
             gestureRecognizer.setTranslation(.zero, in: view)
         case .ended, .cancelled:
-            // Animate the bottom view to its expanded or collapsed position based on the final vertical position
             let isExpanded = -bottomViewTopConstraint.constant - statsViewMinHeight > statsViewMaxHeight + bottomViewTopConstraint.constant
 
             UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {

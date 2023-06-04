@@ -30,7 +30,7 @@ class ExchangeCollectionView: UIView {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-        flowLayout.minimumInteritemSpacing = 10 // ?
+        flowLayout.minimumInteritemSpacing = 10
         flowLayout.itemSize = CGSize(width: 100, height: 80)
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)

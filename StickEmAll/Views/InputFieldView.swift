@@ -1,9 +1,3 @@
-//
-//  InputView.swift
-//  MovieApp
-//
-//  Created by endava-bootcamp on 27.03.2023..
-//
 
 import UIKit
 import PureLayout
@@ -98,7 +92,6 @@ extension InputFieldView: UITextFieldDelegate {
         
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
         
-        // Perform validation
         let isValidNumber = Int(updatedText) ?? nil
         
         return updatedText == "" || isValidNumber != nil

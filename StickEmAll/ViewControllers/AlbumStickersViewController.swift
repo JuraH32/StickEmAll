@@ -59,7 +59,7 @@ class AlbumStickersViewController: UIViewController {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         flowLayout.sectionInset = UIEdgeInsets(top: 30, left: 20, bottom: 30, right: 20)
-        flowLayout.minimumInteritemSpacing = 15 // ?
+        flowLayout.minimumInteritemSpacing = 15
         flowLayout.itemSize = CGSize(width: 75, height: 90)
         
         stickersCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
@@ -106,7 +106,7 @@ class AlbumStickersViewController: UIViewController {
         albumNameLabel.numberOfLines = 0
         
         addModeButton.layer.cornerRadius = 32
-        addModeButton.backgroundColor = .lightRed // or .lightblurple or .blurple ?
+        addModeButton.backgroundColor = .lightRed 
         addModeButton.layer.borderWidth = 3
         addModeButton.layer.borderColor = UIColor.white.cgColor
         addModeButton.setImage(UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .bold)), for: .normal)

@@ -1,9 +1,3 @@
-//
-//  SceneDelegate.swift
-//  StickEmAll
-//
-//  Created by endava-bootcamp on 22.05.2023..
-//
 
 import UIKit
 
@@ -22,9 +16,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let dataSource = AlbumDataSource()
         let router = Router(with: navigationController, dataSource: dataSource)
         
-        //let vc = LogoViewController(router: router)
-        //window?.rootViewController = vc
-        //window?.makeKeyAndVisible()
         router.setStartScreen(in: window)
     }
 

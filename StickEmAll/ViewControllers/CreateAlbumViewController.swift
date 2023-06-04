@@ -62,12 +62,12 @@ class CreateAlbumViewController: UIViewController {
         
         createButtonLabel.text = "Add album"
         createButtonLabel.textColor = .white
+        createButtonLabel.font = .boldSystemFont(ofSize: 22)
     }
     
     private func defineLayoutForViews() {
         barcodeView.autoAlignAxis(toSuperviewAxis: .vertical)
         barcodeView.autoPinEdge(toSuperviewSafeArea: .top, withInset: padding)
-        //barcodeView.autoPinEdge(.top, to: .bottom, of: viewTitle, withOffset: padding)
         barcodeView.autoMatch(.width, to: .width, of: view, withMultiplier: 0.85)
         barcodeView.autoSetDimension(.height, toSize: 200)
         

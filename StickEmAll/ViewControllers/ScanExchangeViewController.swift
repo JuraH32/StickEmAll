@@ -77,24 +77,31 @@ class ScanExchangeViewController: UIViewController, AVCaptureMetadataOutputObjec
     private func styleViews() {
         view.backgroundColor = .lightRed
         
-        inputLabel.text = "Input code or scan QR code" // "Scan QR code"
+        inputLabel.text = "Input code or scan QR code"
         inputLabel.font = .boldSystemFont(ofSize: 26)
         inputLabel.textColor = .white
         inputLabel.textAlignment = .center
         
         codeField.textColor = .white
         
+        codeFieldContainer.backgroundColor = .white.withAlphaComponent(0.3)
         codeFieldContainer.layer.borderColor = UIColor.white.cgColor
-        codeFieldContainer.layer.borderWidth = 2
+        codeFieldContainer.layer.borderWidth = 3
         codeFieldContainer.layer.cornerRadius = 10
         
-        okBtn.setTitle("OK", for: .normal)
+        okBtn.setAttributedTitle(NSAttributedString(string: "OK", attributes: [.font: UIFont.boldSystemFont(ofSize: 24), .foregroundColor: UIColor.white]), for: .normal)
         okBtn.backgroundColor = .lightBlurple
         okBtn.layer.cornerRadius = 32
+        okBtn.layer.borderColor = UIColor.white.cgColor
+        okBtn.layer.borderWidth = 3
         
-        previewContainer.backgroundColor = .blurple
+        previewContainer.backgroundColor = .lightGray
+        previewContainer.layer.cornerRadius = 10
+        previewContainer.layer.borderColor = UIColor.white.cgColor
+        previewContainer.layer.borderWidth = 3
         
         unavailableLabel.text = "Camera is not available"
+        unavailableLabel.textColor = .black
     }
     
     private func defineLayout() {
@@ -128,36 +135,30 @@ class ScanExchangeViewController: UIViewController, AVCaptureMetadataOutputObjec
     
     @objc func onClick() {
         let code = String(codeField.text!)
-        //let code = "381ccc674b4ecc00c3c00001110100000000E000000000000C000000300000000010000000000000E000000000400000000000000000003"
         router.scannedCode(code: code)
     }
     
     func setupQRCodeScanner() {
-        // Create an instance of AVCaptureDevice for the default camera
         guard let captureDevice = AVCaptureDevice.default(for: .video) else {
             print("Failed to access the camera.")
             return
         }
         
         do {
-            // Create an input object from the capture device
             let input = try AVCaptureDeviceInput(device: captureDevice)
             
-            // Create an instance of AVCaptureSession
             captureSession = AVCaptureSession()
             captureSession.addInput(input)
             
-            // Create an AVCaptureMetadataOutput object and add it to the session
             let captureMetadataOutput = AVCaptureMetadataOutput()
             captureSession.addOutput(captureMetadataOutput)
             
-            // Set the delegate and queue on the output object to receive metadata
             captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             captureMetadataOutput.metadataObjectTypes = [.qr]
             
-            // Create a preview layer and set it as the view's layer
             previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             previewLayer.videoGravity = .resizeAspectFill
+            previewLayer.cornerRadius = 10
             unavailableLabel.isHidden = true
             previewContainer.layer.addSublayer(previewLayer)
         } catch {
@@ -178,14 +179,10 @@ class ScanExchangeViewController: UIViewController, AVCaptureMetadataOutputObjec
     }
     
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
-        // Check if any metadata objects are found
         if let metadataObject = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
            let stringValue = metadataObject.stringValue {
-            // Stop the scanner after capturing a QR code if needed
             stopQRCodeScanner()
             
-            // Perform any desired actions with the captured value
-            print(stringValue)
             router.scannedCode(code: stringValue)
         }
     }

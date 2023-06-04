@@ -35,17 +35,25 @@ class CodeOutputView: UIView {
         qrCodeButton = UIButton()
         qrCodeButton.addTarget(self, action: #selector(handleQRCodePress), for: .touchUpInside)
         addSubview(qrCodeButton)
+        
+        let touchGesture = UITapGestureRecognizer(target: self, action: #selector(tapOnView(_:)))
+        touchGesture.numberOfTapsRequired = 1
+        touchGesture.numberOfTouchesRequired = 1
+        addGestureRecognizer(touchGesture)
     }
     
     private func styleViews() {
-        outMessage.text = "View to generate code for exchange"
+        
+        outMessage.text = "Scan or click to copy exchange code"
+        outMessage.font = .systemFont(ofSize: 22)
         outMessage.backgroundColor = .white
         outMessage.textAlignment = .center
         outMessage.lineBreakMode = .byWordWrapping
         outMessage.numberOfLines = 0
         
-        okBtn.setTitle("OK - click me", for: .normal)
+        okBtn.setTitle("OK", for: .normal)
         okBtn.setTitleColor(.black, for: .normal)
+        okBtn.setAttributedTitle(NSAttributedString(string: "OK", attributes: [.font: UIFont.systemFont(ofSize: 26)]), for: .normal)
         okBtn.backgroundColor = .white
         
         backgroundColor = .white
@@ -62,6 +70,7 @@ class CodeOutputView: UIView {
         
         okBtn.autoPinEdge(toSuperviewEdge: .bottom)
         okBtn.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
+        okBtn.autoPinEdge(.top, to: .bottom, of: qrCodeButton, withOffset: 10)
     }
     
     @objc private func handleOK() {
@@ -81,5 +90,9 @@ class CodeOutputView: UIView {
         guard let exchangeCode = self.exchangeCode else { return }
         let pasteboard = UIPasteboard.general
         pasteboard.string = exchangeCode
+    }
+    
+    @objc private func tapOnView(_ gestureRecognizer: UITapGestureRecognizer) {
+        // do nothing
     }
 }
