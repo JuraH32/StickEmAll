@@ -16,6 +16,7 @@ class ScanExchangeViewController: UIViewController, AVCaptureMetadataOutputObjec
     private var codeFieldContainer: UIView!
     private var codeField: UITextField!
     private var previewContainer: UIView!
+    private var unavailableLabel: UILabel!
     
     init (router: Router) {
         self.router = router
@@ -32,6 +33,7 @@ class ScanExchangeViewController: UIViewController, AVCaptureMetadataOutputObjec
         styleViews()
         defineLayout()
         setupQRCodeScanner()
+        self.hideKeyboardWhenTappedAround()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,11 +48,12 @@ class ScanExchangeViewController: UIViewController, AVCaptureMetadataOutputObjec
         stopQRCodeScanner()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        previewLayer?.frame = previewContainer.layer.bounds
+    }
+    
     private func createViews() {
-        okBtn = UIButton()
-        view.addSubview(okBtn)
-        okBtn.addTarget(self, action: #selector(onClick), for: .touchUpInside)
-        
         inputLabel = UILabel()
         view.addSubview(inputLabel)
         
@@ -62,12 +65,19 @@ class ScanExchangeViewController: UIViewController, AVCaptureMetadataOutputObjec
         
         previewContainer = UIView()
         view.addSubview(previewContainer)
+        
+        unavailableLabel = UILabel()
+        previewContainer.addSubview(unavailableLabel)
+        
+        okBtn = UIButton()
+        view.addSubview(okBtn)
+        okBtn.addTarget(self, action: #selector(onClick), for: .touchUpInside)
     }
     
     private func styleViews() {
         view.backgroundColor = .lightRed
         
-        inputLabel.text = "Input code" // "Scan QR code"
+        inputLabel.text = "Input code or scan QR code" // "Scan QR code"
         inputLabel.font = .boldSystemFont(ofSize: 26)
         inputLabel.textColor = .white
         inputLabel.textAlignment = .center
@@ -82,10 +92,13 @@ class ScanExchangeViewController: UIViewController, AVCaptureMetadataOutputObjec
         okBtn.backgroundColor = .lightBlurple
         okBtn.layer.cornerRadius = 32
         
+        previewContainer.backgroundColor = .blurple
+        
+        unavailableLabel.text = "Camera is not available"
     }
     
     private func defineLayout() {
-        inputLabel.autoPinEdge(toSuperviewSafeArea: .top, withInset: 50)
+        inputLabel.autoPinEdge(toSuperviewSafeArea: .top, withInset: 20)
         inputLabel.autoPinEdge(toSuperviewSafeArea: .leading)
         inputLabel.autoPinEdge(toSuperviewSafeArea: .trailing)
         
@@ -99,15 +112,18 @@ class ScanExchangeViewController: UIViewController, AVCaptureMetadataOutputObjec
         codeField.autoPinEdge(toSuperviewEdge: .leading, withInset: 10)
         codeField.autoPinEdge(toSuperviewEdge: .trailing, withInset: 10)
         
-        previewContainer.autoPinEdge(.top, to: .bottom, of: codeFieldContainer, withOffset: 40)
-        previewContainer.autoPinEdge(.bottom, to: .top, of: okBtn, withOffset: 40)
-        previewContainer.autoAlignAxis(toSuperviewAxis: .vertical)
-        previewContainer.autoMatch(.width, to: .width, of: view, withMultiplier: 0.8)
-        
         okBtn.autoSetDimension(.width, toSize: 64)
         okBtn.autoMatch(.height, to: .width, of: okBtn)
         okBtn.autoAlignAxis(toSuperviewAxis: .vertical)
-        okBtn.autoPinEdge(toSuperviewSafeArea: .bottom, withInset: 20)
+        okBtn.autoPinEdge(toSuperviewSafeArea: .bottom)
+        
+        previewContainer.autoPinEdge(.top, to: .bottom, of: codeFieldContainer, withOffset: 40)
+        previewContainer.autoPinEdge(.bottom, to: .top, of: okBtn, withOffset: -20)
+        previewContainer.autoAlignAxis(toSuperviewAxis: .vertical)
+        previewContainer.autoMatch(.width, to: .width, of: view, withMultiplier: 0.75)
+        
+        unavailableLabel.autoAlignAxis(toSuperviewAxis: .vertical)
+        unavailableLabel.autoAlignAxis(toSuperviewAxis: .horizontal)
     }
     
     @objc func onClick() {
@@ -142,7 +158,7 @@ class ScanExchangeViewController: UIViewController, AVCaptureMetadataOutputObjec
             // Create a preview layer and set it as the view's layer
             previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             previewLayer.videoGravity = .resizeAspectFill
-            previewLayer.frame = previewContainer.layer.bounds
+            unavailableLabel.isHidden = true
             previewContainer.layer.addSublayer(previewLayer)
         } catch {
             print("Error setting up QR code scanner: \(error)")
@@ -150,25 +166,27 @@ class ScanExchangeViewController: UIViewController, AVCaptureMetadataOutputObjec
     }
     
     func startQRCodeScanner() {
-        captureSession?.startRunning()
+        DispatchQueue.global(qos: .background).async {
+            self.captureSession?.startRunning()
+        }
     }
     
     func stopQRCodeScanner() {
-        captureSession?.stopRunning()
+        DispatchQueue.global(qos: .background).async {
+            self.captureSession?.stopRunning()
+        }
     }
     
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         // Check if any metadata objects are found
         if let metadataObject = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
            let stringValue = metadataObject.stringValue {
-            // Process the captured QR code value
-            print("QR Code value: \(stringValue)")
-            
             // Stop the scanner after capturing a QR code if needed
             stopQRCodeScanner()
             
             // Perform any desired actions with the captured value
-            // ...
+            print(stringValue)
+            router.scannedCode(code: stringValue)
         }
     }
 }

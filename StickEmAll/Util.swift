@@ -61,15 +61,16 @@ extension String {
     }
 }
 
-extension UIImageView {
-    func setImageWithoutCache(image: UIImage?) {
-            let uniqueIdentifier = UUID().uuidString
-            self.image = nil
-            DispatchQueue.main.async {
-                self.image = image
-                self.accessibilityIdentifier = uniqueIdentifier
-            }
-        }
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }
 
 

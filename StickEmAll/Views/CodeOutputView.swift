@@ -7,6 +7,7 @@ class CodeOutputView: UIView {
     private var qrCodeButton: UIButton!
     private var qrCodeView: UIImageView!
     private let sizeMulitplier = 0.8
+    private var exchangeCode: String?
     
     init() {
         super.init(frame: .zero)
@@ -32,6 +33,7 @@ class CodeOutputView: UIView {
         okBtn.addTarget(self, action: #selector(handleOK), for: .touchUpInside)
         
         qrCodeButton = UIButton()
+        qrCodeButton.addTarget(self, action: #selector(handleQRCodePress), for: .touchUpInside)
         addSubview(qrCodeButton)
     }
     
@@ -47,15 +49,11 @@ class CodeOutputView: UIView {
         okBtn.backgroundColor = .white
         
         backgroundColor = .white
-//
-//        qrCodeButton.backgroundColor = .red
     }
     
     private func defineLayout() {
         outMessage.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom)
-        
-//        qrCodeView.autoPinEdgesToSuperviewEdges()
-        
+
         qrCodeButton.autoPinEdge(.top, to: .bottom, of: outMessage)
         qrCodeButton.autoMatch(.width, to: .height, of: qrCodeButton)
         qrCodeButton.autoAlignAxis(toSuperviewAxis: .horizontal)
@@ -66,25 +64,22 @@ class CodeOutputView: UIView {
         okBtn.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
     }
     
-//    func bindData(code: String) {
-////        print(code)
-//////        qrCodeView.image = nil
-////        let dimensions = self.layer.bounds.width * sizeMulitplier
-////        let image = generateQRCode(from: code, width: dimensions, height: dimensions)
-////        DispatchQueue.main.async {
-////            self.qrCodeButton.setBackgroundImage(image, for: .normal)
-////        }
-//    }
-    
     @objc private func handleOK() {
         self.isHidden = true
     }
     
     func loadCode(code: String) {
+        self.exchangeCode = code
         qrCodeButton.subviews.forEach({$0.removeFromSuperview()})
         let image = UIImageView(image: generateQRCode(from: code, width: self.layer.bounds.width, height: self.layer.bounds.width))
         qrCodeButton.addSubview(image)
         image.autoPinEdgesToSuperviewEdges()
         layoutIfNeeded()
+    }
+    
+    @objc private func handleQRCodePress() {
+        guard let exchangeCode = self.exchangeCode else { return }
+        let pasteboard = UIPasteboard.general
+        pasteboard.string = exchangeCode
     }
 }

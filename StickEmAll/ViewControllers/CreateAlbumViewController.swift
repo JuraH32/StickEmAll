@@ -27,17 +27,20 @@ class CreateAlbumViewController: UIViewController {
         createViews()
         styleViews()
         defineLayoutForViews()
+        self.hideKeyboardWhenTappedAround()
     }
     
     private func createViews() {
         viewTitle = UILabel()
         navigationItem.titleView = viewTitle
         
-        barcodeView = AlbumBarcodeView()
-        view.addSubview(barcodeView)
-        
         formView = AlbumFormView()
         view.addSubview(formView)
+        
+        barcodeView = AlbumBarcodeView { [weak self] barCode in
+            self?.formView.inputFieldCode.inputField.text = barCode
+        }
+        view.addSubview(barcodeView)
         
         createButton = UIButton()
         view.addSubview(createButton)
@@ -62,9 +65,6 @@ class CreateAlbumViewController: UIViewController {
     }
     
     private func defineLayoutForViews() {
-        //viewTitle.autoAlignAxis(toSuperviewAxis: .vertical)
-        //viewTitle.autoPinEdge(toSuperviewSafeArea: .top, withInset: padding)
-        
         barcodeView.autoAlignAxis(toSuperviewAxis: .vertical)
         barcodeView.autoPinEdge(toSuperviewSafeArea: .top, withInset: padding)
         //barcodeView.autoPinEdge(.top, to: .bottom, of: viewTitle, withOffset: padding)
@@ -90,4 +90,6 @@ class CreateAlbumViewController: UIViewController {
         viewModel.createAlbum(code: code, name: name, numberOfSticker: numberOfStickers, numberOfStickerPerPack: numberOfStickerPerPack)
         router.addedAlbum()
     }
+    
+    
 }
